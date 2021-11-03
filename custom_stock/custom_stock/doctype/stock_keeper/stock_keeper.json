@@ -1,0 +1,53 @@
+{
+ "creation": "2021-01-05 16:08:07.911001",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "user",
+  "user_name",
+  "send_to_warehouse",
+  "receive_at_warehouse"
+ ],
+ "fields": [
+  {
+   "fieldname": "user",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "User",
+   "options": "User"
+  },
+  {
+   "default": "0",
+   "fieldname": "send_to_warehouse",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Send To Warehouse"
+  },
+  {
+   "default": "0",
+   "fieldname": "receive_at_warehouse",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Receive at Warehouse"
+  },
+  {
+   "fetch_from": "user.full_name",
+   "fieldname": "user_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "User Name"
+  }
+ ],
+ "istable": 1,
+ "modified": "2021-01-05 16:21:31.446487",
+ "modified_by": "Administrator",
+ "module": "Custom Stock",
+ "name": "Stock Keeper",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

@@ -1,0 +1,29 @@
+{
+ "creation": "2021-01-10 14:17:08.853265",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_group"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_group",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item Group",
+   "options": "Item Group"
+  }
+ ],
+ "istable": 1,
+ "modified": "2021-01-12 09:38:43.414306",
+ "modified_by": "Administrator",
+ "module": "Custom Stock",
+ "name": "Stock Inventory Processing Item Group",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
