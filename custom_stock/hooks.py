@@ -36,7 +36,8 @@ doctype_js = {
     "Stock Entry": [
         "public/js/intermediate_account.js",
         "public/js/stock_entry_items.js",
-        "public/js/stock_common.js"
+        "public/js/stock_common.js",
+        "public/js/custom_stock_entry.js"
     ],
     "Stock Reconciliation": "public/js/stock _reconciliation.js",
     "Item": "public/js/item_common.js"
