@@ -292,7 +292,7 @@ function receive_at_warehouse(frm) {
 
                             frm.set_value("from_warehouse", _entry.to_warehouse).then(() => {
 
-                                frm.set_value("source_warehouse", _entry.from_warehouse).then(() => {
+                                frm.set_value("source_warehouse", _entry.source_warehouse).then(() => {
                                     frm.events.set_warehouse_acronym(frm, _entry.from_warehouse, "sw");
                                 });
                             });
