@@ -79,11 +79,36 @@ def test(name):
     print(name)
 
 
+def get_future_stock_vouchers(posting_date, posting_time, for_warehouses=None, for_items=None):
+    future_stock_vouchers = []
+
+    values = []
+    condition = ""
+    if for_items:
+        condition += " and item_code in ({})".format(
+            ", ".join(["%s"] * len(for_items)))
+        values += for_items
+
+    if for_warehouses:
+        condition += " and warehouse in ({})".format(
+            ", ".join(["%s"] * len(for_warehouses)))
+        values += for_warehouses
+
+    for d in frappe.db.sql("""select distinct sle.voucher_type, sle.voucher_no
+		from `tabStock Ledger Entry` sle
+		where timestamp(sle.posting_date, sle.posting_time) >= timestamp(%s, %s) {condition}
+		order by timestamp(sle.posting_date, sle.posting_time) asc, creation asc for update""".format(condition=condition),
+                           tuple([posting_date, posting_time] + values), as_dict=True):
+        future_stock_vouchers.append([d.voucher_type, d.voucher_no])
+
+    return future_stock_vouchers
+
+
 def check_future_transactions(doc, method):
     # this function ensures transactions with future entries can not be canceled,
     # do not disable it until solving current account issue
     items, warehouses = doc.get_items_and_warehouses()
-    from erpnext.controllers.stock_controller import get_future_stock_vouchers
+    # from erpnext.controllers.stock_controller import get_future_stock_vouchers
     future_stock_vouchers = get_future_stock_vouchers(
         doc.posting_date, doc.posting_time, warehouses, items)
     if future_stock_vouchers:
@@ -390,7 +415,7 @@ def get_available_items(doctype, txt, searchfield, start, page_len, filters):
             'txt': "%%%s%%" % txt,
             '_txt': txt.replace("%", ""),
             'start': start,
- 			        'page_len': page_len
+            'page_len': page_len
         })
 
 
@@ -496,6 +521,22 @@ def validate_for_items(doc, method):
 def get_warehouse_acronym(wname):
     warehouse = frappe.get_doc('Warehouse', wname)
     print('..........................................s')
+    print(wname)
+    print(frappe.as_json(warehouse.short_name))
+    return warehouse.short_name
+
+@frappe.whitelist()
+def get_in_transit_warehous(wname):
+    warehouse = frappe.get_doc('Warehouse', wname)
+    print('.............................transit')
+    print(warehouse.default_in_transit_warehouse)
+    return warehouse.default_in_transit_warehouse
+
+
+@frappe.whitelist()
+def test_get_warehouse_acronym(wname):
+    warehouse = frappe.get_doc('Warehouse', wname)
+    print('..........................................s')
     print(wname, warehouse.default_in_transit_warehouse)
     message_dic = {"short_name": warehouse.short_name,
                    "transit_warehouse": warehouse.default_in_transit_warehouse}
@@ -514,27 +555,27 @@ def override_scan_barcode():
 
 @frappe.whitelist()
 def search_serial_or_batch_or_barcode_number(search_value):
-	# search barcode no
-	barcode_data = frappe.db.get_value('Item Barcode', {'barcode': search_value}, [
-	                                   'barcode', 'parent as item_code'], as_dict=True)
+    # search barcode no
+    barcode_data = frappe.db.get_value('Item Barcode', {'barcode': search_value}, [
+                                       'barcode', 'parent as item_code'], as_dict=True)
 
-	if not barcode_data:
-		barcode_data = frappe.db.get_value('Item Barcode', {'parent': search_value}, [
-		                                   'barcode', 'parent as item_code'], as_dict=True)
+    if not barcode_data:
+        barcode_data = frappe.db.get_value('Item Barcode', {'parent': search_value}, [
+                                           'barcode', 'parent as item_code'], as_dict=True)
 
-	if barcode_data:
-		return barcode_data
+    if barcode_data:
+        return barcode_data
 
-	# search serial no
-	serial_no_data = frappe.db.get_value('Serial No', search_value, [
-	                                     'name as serial_no', 'item_code'], as_dict=True)
-	if serial_no_data:
-		return serial_no_data
+    # search serial no
+    serial_no_data = frappe.db.get_value('Serial No', search_value, [
+                                         'name as serial_no', 'item_code'], as_dict=True)
+    if serial_no_data:
+        return serial_no_data
 
-	# search batch no
-	batch_no_data = frappe.db.get_value(
-	    'Batch', search_value, ['name as batch_no', 'item as item_code'], as_dict=True)
-	if batch_no_data:
-		return batch_no_data
+    # search batch no
+    batch_no_data = frappe.db.get_value(
+        'Batch', search_value, ['name as batch_no', 'item as item_code'], as_dict=True)
+    if batch_no_data:
+        return batch_no_data
 
-	return {}
+    return {}
