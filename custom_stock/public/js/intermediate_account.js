@@ -35,7 +35,7 @@ frappe.ui.form.on('Stock Entry', {
     },
     purpose(frm) {
         frm.events.set_naming_series(frm);
-        frm.events.set_basic_rate_read_only(frm);
+        // frm.events.set_basic_rate_read_only(frm);
         frm.events.show_inventory_botton(frm);
 
         if (frm.doc.purpose == "Material Transfer") {
