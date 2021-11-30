@@ -233,7 +233,7 @@ frappe.ui.form.on('Stock Entry', {
                 if (r) {
                     let message = r.message;
                     console.log(message);
-                    in_transit_warehouse = message.message;
+                    in_transit_warehouse = message;
                     frm.set_value("to_warehouse", in_transit_warehouse);
                 }
             });

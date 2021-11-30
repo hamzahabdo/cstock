@@ -227,7 +227,7 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 def validate_stock_keeper(doc, method):
     valid = False
     message = ""
-    if((doc.purpose == "Material Transfer" and not doc.outgoing_stock_entry) or doc.purpose == "Material Issue" or doc.purpose == "Manufacture"):
+    if((doc.purpose == "Material Transfer" and not doc.outgoing_stock_entry) or doc.purpose == "Material Issue" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
         message = "Sorry, You can not send from this warehouse"
         keepers = frappe.get_doc(
             "Warehouse", doc.from_warehouse).stock_keeper_users
@@ -235,7 +235,7 @@ def validate_stock_keeper(doc, method):
             if(frappe.session.user == keeper.user and keeper.send_to_warehouse):
                 valid = True
                 break
-    elif((doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt" or doc.purpose == "Manufacture"):
+    elif((doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
         message = "Sorry, You can not receive at this warehouse"
         keepers = frappe.get_doc(
             "Warehouse", doc.to_warehouse).stock_keeper_users
