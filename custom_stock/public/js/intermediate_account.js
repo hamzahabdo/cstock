@@ -146,28 +146,28 @@ frappe.ui.form.on('Stock Entry', {
         if (!frm.doc.outgoing_stock_entry) {
             set_branch(frm, frm.doc.from_warehouse);
         }
-        if (frm.doc.stock_entry_type == "أمر صرف مخزني") {
-            frm.events.set_warehouse_acronym(frm, frm.doc.from_warehouse, "sw");
-            frm.events.set_warehouse_acronym(frm, frm.doc.from_warehouse, "tw");
-        }
-        if (frm.doc.stock_entry_type == "Material Issue") {
+        // if (frm.doc.stock_entry_type == "أمر صرف مخزني") {
+        //     frm.events.set_warehouse_acronym(frm, frm.doc.from_warehouse, "sw");
+        //     frm.events.set_warehouse_acronym(frm, frm.doc.from_warehouse, "tw");
+        // }
+        if (frm.doc.purpose == __("Material Issue")) {
             frm.events.set_warehouse_acronym(frm, frm.doc.from_warehouse, "sw");
             frm.events.set_warehouse_acronym(frm, frm.doc.from_warehouse, "tw");
         }
     },
     to_warehouse(frm) {
-        if (frm.doc.purpose == "Material Receipt") {
+        if (frm.doc.purpose == __("Material Receipt")) {
             frm.set_value("target_warehouse", frm.doc.to_warehouse).then(
                 frm.events.set_warehouse_acronym(frm, frm.doc.to_warehouse, "sw")
             )
             set_branch(frm, frm.doc.to_warehouse);
         }
-        if (frm.doc.stock_entry_type == "أمر توريد مخزني") {
-            frm.set_value("target_warehouse", frm.doc.to_warehouse).then(
-                frm.events.set_warehouse_acronym(frm, frm.doc.to_warehouse, "sw")
-            )
-            set_branch(frm, frm.doc.to_warehouse);
-        }
+        // if (frm.doc.stock_entry_type == "أمر توريد مخزني") {
+        //     frm.set_value("target_warehouse", frm.doc.to_warehouse).then(
+        //         frm.events.set_warehouse_acronym(frm, frm.doc.to_warehouse, "sw")
+        //     )
+        //     set_branch(frm, frm.doc.to_warehouse);
+        // }
     },
     prepare_MT(frm) {
         toggle_fields(frm, false, 'to_warehouse', 'source_warehouse');
