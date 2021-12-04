@@ -41,8 +41,9 @@ frappe.ui.form.on('Stock Entry', {
         if (frm.doc.purpose == "Material Transfer") {
             if (frm.doc.outgoing_stock_entry) {
                 frm.events.prepare_RAW(frm);
-            } else {
-                frm.events.prepare_MT(frm);
+            } else{
+                toggle_fields(cur_frm, false, 'source_warehouse', 'target_warehouse')
+                toggle_fields(frm, true, 'to_warehouse');
             }
         }
         // else if (frm.doc.purpose == "Material Transfer") {
@@ -71,6 +72,15 @@ frappe.ui.form.on('Stock Entry', {
             frm.set_value("tw", "")
         }
     },
+    add_to_transit(frm){
+        if(frm.doc.add_to_transit){
+            frm.events.prepare_MT(frm);
+        }else{
+            toggle_fields(cur_frm, false, 'source_warehouse', 'target_warehouse')
+            toggle_fields(frm, true, 'to_warehouse');
+        }
+    }
+    ,
     show_inventory_botton(frm) {
         if (frm.doc.purpose == "Material Issue") {
             frm.events.get_inventory_items(frm, -1);
@@ -134,7 +144,7 @@ frappe.ui.form.on('Stock Entry', {
     from_warehouse(frm) {
         frm.set_value("source_warehouse", frm.doc.from_warehouse).then(() => {
             frm.events.set_warehouse_acronym(frm, frm.doc.from_warehouse, "sw");
-            if (!frm.doc.outgoing_stock_entry) {
+            if (!frm.doc.outgoing_stock_entry && frm.doc.add_to_transit) {
                 frm.events.set_in_transit_warehouse(frm, frm.doc.from_warehouse);
             }
             // let to_ware = frm.doc.from_warehouse 
@@ -161,6 +171,9 @@ frappe.ui.form.on('Stock Entry', {
                 frm.events.set_warehouse_acronym(frm, frm.doc.to_warehouse, "sw")
             )
             set_branch(frm, frm.doc.to_warehouse);
+        }
+        if(frm.doc.purpose == __("Material Transfer") && !frm.doc.add_to_transit){
+            frm.events.set_warehouse_acronym(frm, frm.doc.to_warehouse, "tw")
         }
         // if (frm.doc.stock_entry_type == "أمر توريد مخزني") {
         //     frm.set_value("target_warehouse", frm.doc.to_warehouse).then(
