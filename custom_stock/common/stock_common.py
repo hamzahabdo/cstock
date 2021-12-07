@@ -235,7 +235,9 @@ def validate_stock_keeper(doc, method):
             if(frappe.session.user == keeper.user and keeper.send_to_warehouse):
                 valid = True
                 break
-    elif((doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
+        
+        
+    elif((doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt"):
         message = "Sorry, You can not receive at this warehouse"
         keepers = frappe.get_doc(
             "Warehouse", doc.to_warehouse).stock_keeper_users
@@ -243,6 +245,43 @@ def validate_stock_keeper(doc, method):
             if(frappe.session.user == keeper.user and keeper.receive_at_warehouse):
                 valid = True
                 break
+    
+    # elif(doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
+    #     from_warehouse = doc.from_warehouse
+    #     if(not from_warehouse):
+    #         for fw in doc.items:
+    #             if(fw.s_warehouse):
+    #                 from_warehouse = fw.s_warehouse
+    #             else:
+    #                 from_warehouse = doc.from_warehouse
+    #                 break
+    #     keepers = frappe.get_doc(
+    #         "Warehouse", from_warehouse).stock_keeper_users
+    #     for keeper in keepers:
+    #         if(frappe.session.user == keeper.user and keeper.send_to_warehouse):
+    #             valid = True
+    #             break
+    #         else:
+    #             message = "Sorry, You can not send from this warehouse"
+
+    #     # to_warehouse = doc.to_warehouse
+    #     # if(not to_warehouse):
+    #     #     for tw in doc.items:
+    #     #         if(tw.t_warehouse):
+    #     #             to_warehouse = tw.t_warehouse
+    #     #         else:
+    #     #             to_warehouse = doc.to_warehouse
+    #     #             break
+
+    #     # keepers = frappe.get_doc(
+    #     #         "Warehouse", to_warehouse).stock_keeper_users
+    #     # for keeper in keepers:
+    #     #     if(frappe.session.user == keeper.user and keeper.receive_at_warehouse):
+    #     #         valid = True
+    #     #         break 
+    #     #     else:
+    #     #         message = "Sorry, You can not receive at this warehouse"
+
     if(not valid):
         frappe.throw(_(message))
 
@@ -289,7 +328,16 @@ def set_branch(doc, method):
     if (doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt":
         _branch = frappe.get_doc('Warehouse', doc.to_warehouse)
     else:
-        _branch = frappe.get_doc('Warehouse', doc.from_warehouse)
+        from_warehouse = doc.from_warehouse
+        # if(not from_warehouse):
+        #     if(doc.purpose == "Material Transfer for Manufacture" or doc.purpose == "Manufacture"):
+        #         for fw in doc.items:
+        #             if(fw.s_warehouse):
+        #                 from_warehouse = fw.s_warehouse
+        #             else:
+        #                 from_warehouse = doc.from_warehouse
+        #                 break
+        _branch = frappe.get_doc('Warehouse', from_warehouse)
 
     branch = _branch.branch
     doc.set("branch", branch)
