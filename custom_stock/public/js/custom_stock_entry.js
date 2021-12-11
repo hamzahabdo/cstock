@@ -17,7 +17,6 @@ frappe.ui.form.on('Stock Entry',{
                     frm.refresh_field('items');
                     const scrap_item = r.message; 
                     for(var i in scrap_item){
-                        console.log(scrap_item[i]["item_code"]);
                         let child=frm.add_child('items', {
                              item_code:scrap_item[i]["item_code"],
                              qty:scrap_item[i]["qty"],
