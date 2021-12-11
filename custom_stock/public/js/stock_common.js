@@ -151,7 +151,7 @@ frappe.ui.form.on('Stock Entry', {
         nct.utils.copy_new_to_old(frm, "remarks_area", "remarks");
     },
     stock_entry_type(frm) {
-        if (frm.doc.stock_entry_type == "أمر صرف مخزني" || frm.doc.stock_entry_type == "أمر توريد مخزني") {
+        if (frm.doc.stock_entry_type == "Material Issue" || frm.doc.stock_entry_type == "Material Receipt" || frm.doc.stock_entry_type == "أمر صرف مخزني" || frm.doc.stock_entry_type == "أمر توريد مخزني") {
             frm.doc.tw = frm.doc.sw
         }
     }
