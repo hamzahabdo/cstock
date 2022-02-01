@@ -48,7 +48,7 @@ frappe.ui.form.on('Stock Entry', {
             if(frm.doc.purpose == "Material Transfer" && frm.doc.add_to_transit){
                 frm.doc.from_warehouse = frm.doc.items[0].s_warehouse
                 frm.doc.target_warehouse = frm.doc.items[0].t_warehouse
-                // frm.events.set_warehouse_acronym(frm, frm.doc.items[0].s_warehouse, "sw");
+                frm.events.set_warehouse_acronym(frm, frm.doc.items[0].s_warehouse, "sw");
                 if (!frm.doc.outgoing_stock_entry && frm.doc.add_to_transit) {
                     frm.events.set_in_transit_warehouse(frm, frm.doc.items[0].s_warehouse);
                     }
