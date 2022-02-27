@@ -198,29 +198,34 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
                 "Warehouse", self.source_warehouse).default_in_transit_warehouse
             # intermediate_account = frappe.get_doc(
             #     "Warehouse", intermediate_warehouse).account
-            print("----------------------------------------------")
-            print(self.from_warehouse)
+            
             intermediate_account = frappe.get_doc(
                 "Warehouse", intermediate_warehouse).account
-            if(entry.account == intermediate_account):
-                current_account = None
-                # if(self.get("purpose") == "Send to Warehouse"):
-                if(self.get("purpose") == "Material Transfer" and not self.outgoing_stock_entry):
-                    current_account = get_current_account(
-                        self.target_warehouse)
-                elif(self.get("purpose") == "Material Transfer" and self.outgoing_stock_entry):
-                    current_account = get_current_account(
-                        self.source_warehouse)
-                intermediate = entry.copy()
-                intermediate.account = current_account
-                processed_gl_map.append(intermediate)
+            target_current_account = get_current_account(self.target_warehouse)
+            source_current_account = get_current_account(self.source_warehouse)
+            
+            if not (source_current_account == target_current_account):
+                if(entry.account == intermediate_account):
+                    current_account = None
+                    # if(self.get("purpose") == "Send to Warehouse"):
+                    if(self.get("purpose") == "Material Transfer" and not self.outgoing_stock_entry):
+                        # current_account = get_current_account(self.target_warehouse)
+                        current_account = target_current_account
 
-                if(entry.credit > 0):
-                    entry.debit = entry.credit
-                else:
-                    entry.credit = entry.debit
-                break
-    print(process_gl_map)
+                    elif(self.get("purpose") == "Material Transfer" and self.outgoing_stock_entry):
+                        # current_account = get_current_account(self.source_warehouse)
+                        current_account = source_current_account
+                    
+                    intermediate = entry.copy()
+                    intermediate.account = current_account
+                    
+                    processed_gl_map.append(intermediate)
+
+                    if(entry.credit > 0):
+                        entry.debit = entry.credit
+                    else:
+                        entry.credit = entry.debit
+                    break
     return processed_gl_map
 
 
