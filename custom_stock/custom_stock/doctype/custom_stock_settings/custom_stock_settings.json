@@ -1,10 +1,12 @@
 {
  "actions": [],
+ "autoname": "SCP.#####",
  "creation": "2021-11-03 16:56:36.749462",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "warehouse",
   "item"
  ],
  "fields": [
@@ -14,11 +16,19 @@
    "label": "item",
    "options": "Scrap Item",
    "reqd": 1
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Warehouse",
+   "options": "Warehouse",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2021-11-03 16:56:36.749462",
+ "modified": "2022-02-12 11:57:22.636764",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "Custom Stock Settings",

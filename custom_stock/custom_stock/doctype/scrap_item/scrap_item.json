@@ -6,7 +6,8 @@
  "engine": "InnoDB",
  "field_order": [
   "item_scrap",
-  "item_uom"
+  "item_name",
+  "uom"
  ],
  "fields": [
   {
@@ -18,18 +19,29 @@
    "reqd": 1
   },
   {
+   "fetch_from": "item_scrap.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "ItemName",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
    "fetch_from": "item_scrap.stock_uom",
-   "fieldname": "item_uom",
+   "fieldname": "uom",
    "fieldtype": "Link",
-   "label": "Item_UOM",
+   "in_list_view": 1,
+   "label": "UOM",
    "options": "UOM",
+   "read_only": 1,
    "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2021-11-04 18:33:09.412086",
+ "modified": "2022-02-12 10:48:37.445670",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "Scrap Item",

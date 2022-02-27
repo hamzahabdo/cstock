@@ -107,6 +107,8 @@ def get_future_stock_vouchers(posting_date, posting_time, for_warehouses=None, f
 def check_future_transactions(doc, method):
     # this function ensures transactions with future entries can not be canceled,
     # do not disable it until solving current account issue
+    if(frappe.get_single("Common Stock Setting").disable_future_stock_transaction_check):
+        return
     items, warehouses = doc.get_items_and_warehouses()
     # from erpnext.controllers.stock_controller import get_future_stock_vouchers
     future_stock_vouchers = get_future_stock_vouchers(
