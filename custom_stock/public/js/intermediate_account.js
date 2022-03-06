@@ -35,6 +35,9 @@ frappe.ui.form.on('Stock Entry', {
         // }
 
 
+        if(frm.doc.add_to_transit && frm.doc.outgoing_stock_entry){
+            document.querySelectorAll("[data-label='End%20Transit']")[0].hidden = true
+        }
     },
     before_save(frm){
         if(frm.doc.purpose == __("Manufacture") && frm.doc.from_warehouse){
