@@ -67,10 +67,10 @@ frappe.ui.form.on('Stock Entry', {
         if (frm.doc.purpose == "Material Transfer") {
             if (frm.doc.outgoing_stock_entry) {
                 frm.events.prepare_RAW(frm);
-            } else{
-                // toggle_fields(cur_frm, false, 'source_warehouse', 'target_warehouse')
-                // toggle_fields(frm, true, 'to_warehouse');
-                frm.events.add_to_transit(frm)
+            } else if (frm.doc.add_to_transit){
+                toggle_fields(cur_frm, false, 'source_warehouse', 'target_warehouse')
+                toggle_fields(frm, true, 'to_warehouse');
+                // frm.events.add_to_transit(frm)
             }
         } 
         // else if (frm.doc.purpose == "Material Transfer") {
@@ -102,11 +102,13 @@ frappe.ui.form.on('Stock Entry', {
         if(frm.doc.add_to_transit){
             frm.events.prepare_MT(frm);
         }else{
-            toggle_fields(cur_frm, false, 'source_warehouse', 'to_warehouse')
-            toggle_fields(frm, true, 'target_warehouse');
-            frm.doc.items.map(p=>{
-                p.t_warehouse = ''})
-            frm.refresh_fields()
+            toggle_fields(cur_frm, false, 'source_warehouse', 'target_warehouse')
+            toggle_fields(frm, true, 'to_warehouse');
+            // toggle_fields(cur_frm, false, 'source_warehouse', 'to_warehouse')
+            // toggle_fields(frm, true, 'target_warehouse');
+            // frm.doc.items.map(p=>{
+            //     p.t_warehouse = ''})
+            // frm.refresh_fields()
         }
     },
     show_inventory_botton(frm) {
@@ -213,6 +215,7 @@ frappe.ui.form.on('Stock Entry', {
     prepare_MT(frm) {
         toggle_fields(frm, false, 'to_warehouse', 'source_warehouse');
         toggle_fields(frm, true, 'from_warehouse', 'target_warehouse');
+
         reset_fields(frm, "", "target_warehouse");
         frm.set_df_property('target_warehouse', 'read_only', 0);
 
