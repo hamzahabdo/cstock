@@ -126,6 +126,9 @@ doc_events = {
     "Purchase Invoice": {
         "validate": "custom_stock.common.stock_common.assign_override_methods",
         "on_cancel": "custom_stock.common.stock_common.assign_override_methods"
+    },
+    "Stock Ledger Entry": {
+        "before_save": "custom_stock.common.custom_stock_ledger_entry.check_actual_qty"
     }
 }
 
@@ -178,24 +181,24 @@ doc_events = {
 # --------------------
 
 user_data_fields = [
-	{
-		"doctype": "{doctype_1}",
-		"filter_by": "{filter_by}",
-		"redact_fields": ["{field_1}", "{field_2}"],
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_2}",
-		"filter_by": "{filter_by}",
-		"partial": 1,
-	},
-	{
-		"doctype": "{doctype_3}",
-		"strict": False,
-	},
-	{
-		"doctype": "{doctype_4}"
-	}
+    {
+        "doctype": "{doctype_1}",
+        "filter_by": "{filter_by}",
+        "redact_fields": ["{field_1}", "{field_2}"],
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_2}",
+        "filter_by": "{filter_by}",
+        "partial": 1,
+    },
+    {
+        "doctype": "{doctype_3}",
+        "strict": False,
+    },
+    {
+        "doctype": "{doctype_4}"
+    }
 ]
 
 # Authentication and authorization
@@ -204,4 +207,3 @@ user_data_fields = [
 # auth_hooks = [
 # 	"custom_stock.auth.validate"
 # ]
-
