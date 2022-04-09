@@ -638,10 +638,9 @@ def search_serial_or_batch_or_barcode_number(search_value):
 
 
 def validate_add_to_transit(doc,method):
-    source_current_warehouse = get_current_account(doc.source_warehouse)
-    target_current_warehouse = get_current_account(doc.target_warehouse)
-
     if(doc.purpose == 'Material Transfer' and not doc.outgoing_stock_entry):
+        source_current_warehouse = get_current_account(doc.source_warehouse)
+        target_current_warehouse = get_current_account(doc.target_warehouse)
         if(source_current_warehouse != target_current_warehouse and not doc.add_to_transit):
             frappe.throw(_('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
             

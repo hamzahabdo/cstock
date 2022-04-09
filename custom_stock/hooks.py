@@ -112,7 +112,7 @@ doc_events = {
         # "on_submit": "custom_stock.common.stock_common.make_current_account_entries",
         "on_cancel": "custom_stock.common.stock_common.check_future_transactions",
         "validate": [
-                    #  "custom_stock.common.stock_common.validate_add_to_transit",
+                     "custom_stock.common.stock_common.validate_add_to_transit",
                      "custom_stock.common.stock_common.assign_override_methods",
                      "custom_stock.common.stock_common.validate_stock_keeper",
                      "custom_stock.common.stock_common.set_branch",
