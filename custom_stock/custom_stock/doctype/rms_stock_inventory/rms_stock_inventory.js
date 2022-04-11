@@ -32,7 +32,7 @@ frappe.ui.form.on("RMS Stock Inventory", {
 				"",
 				() => {
 					frappe.call({
-						method: "rstrnt.custom_restaurant.doctype.rms_stock_inventory.rms_stock_inventory.get_stock_ledger_entries",
+						method: "custom_stock.custom_stock.doctype.rms_stock_inventory.rms_stock_inventory.get_stock_ledger_entries",
 						args: {
 							doc: frm.doc,
 						},
@@ -75,7 +75,7 @@ function get_conversion(frm, cdn, cdt) {
 	const row = locals[cdt][cdn];
 	if (row.item_code !== undefined) {
 		frappe.call({
-			method: "rstrnt.custom_restaurant.doctype.rms_stock_inventory.rms_stock_inventory.get_conversion",
+			method: "custom_stock.custom_stock.doctype.rms_stock_inventory.rms_stock_inventory.get_conversion",
 			args: {
 				item_code: row.item_code,
 				uom: row.uom,
@@ -101,7 +101,7 @@ function get_conversion(frm, cdn, cdt) {
 function fill_child_table_fields(frm, cdt, cdn) {
 	const row = locals[cdt][cdn];
 	frappe.call({
-		method: "rstrnt.custom_restaurant.doctype.rms_stock_inventory.rms_stock_inventory.get_item_uom",
+		method: "custom_stock.custom_stock.doctype.rms_stock_inventory.rms_stock_inventory.get_item_uom",
 		args: {
 			item_code: row.item_code,
 		},
