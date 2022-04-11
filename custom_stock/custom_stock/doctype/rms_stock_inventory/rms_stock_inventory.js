@@ -28,8 +28,8 @@ frappe.ui.form.on("RMS Stock Inventory", {
 	add_context_buttons(frm) {
 		frm.add_custom_button(__("Make Inventory"), () => {
 			frappe.warn(
+				"Confermation",
 				"DO you want to continue the process?",
-				"",
 				() => {
 					frappe.call({
 						method: "custom_stock.custom_stock.doctype.rms_stock_inventory.rms_stock_inventory.get_stock_ledger_entries",
