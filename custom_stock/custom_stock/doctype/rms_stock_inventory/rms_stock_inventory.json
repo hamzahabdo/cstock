@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "RMS.",
+ "autoname": "RMS.#",
  "creation": "2022-03-30 11:50:25.547110",
  "doctype": "DocType",
  "editable_grid": 1,
@@ -109,7 +109,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-11 11:00:17.609007",
+ "modified": "2022-04-11 11:10:00.327230",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "RMS Stock Inventory",
