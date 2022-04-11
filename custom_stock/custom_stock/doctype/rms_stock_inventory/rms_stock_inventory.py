@@ -42,7 +42,7 @@ def filter_uom(items):
 def dispose_of_goods(items, account, warehouse, doc_name):
     if items:
         data = frappe.new_doc("Stock Entry")
-        data.stock_entry_type = "تالف"
+        data.stock_entry_type = "صرف مخزني"
         data.purpose = "Material Issue"
         data.expense_account = account
         data.from_warehouse = warehouse
