@@ -61,8 +61,7 @@
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Items",
-   "options": "RMS Item Inventory",
-   "reqd": 1
+   "options": "RMS Item Inventory"
   },
   {
    "fieldname": "amended_from",
@@ -109,7 +108,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-11 11:10:00.327230",
+ "modified": "2022-04-11 13:16:47.973726",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "RMS Stock Inventory",
