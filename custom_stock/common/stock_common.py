@@ -192,7 +192,7 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
     from erpnext.accounts.general_ledger import process_gl_map
 
     processed_gl_map = process_gl_map(gl_list)
-    if self.get("purpose") == "Material Transfer":
+    if self.get("purpose") == "Material Transfer" and ( self.get("add_to_transit") or self.get("outgoing_stock_entry") ):
         for entry in processed_gl_map:
             # intermediate_warehouse = frappe.get_doc(
             #     "NCITY Settings").intermediate_warehouse
@@ -228,6 +228,7 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
                     else:
                         entry.credit = entry.debit
                     break
+
     return processed_gl_map
 
 
@@ -638,9 +639,10 @@ def search_serial_or_batch_or_barcode_number(search_value):
 
 
 def validate_add_to_transit(doc,method):
-    if(doc.purpose == 'Material Transfer' and not doc.outgoing_stock_entry):
-        source_current_warehouse = get_current_account(doc.source_warehouse)
-        target_current_warehouse = get_current_account(doc.target_warehouse)
-        if(source_current_warehouse != target_current_warehouse and not doc.add_to_transit):
-            frappe.throw(_('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
+    if(doc.purpose == 'Material Transfer' and not doc.outgoing_stock_entry and not doc.add_to_transit):
+        if(doc.from_warehouse and doc.to_warehouse):
+            from_current_warehouse = get_current_account(doc.from_warehouse)
+            to_current_warehouse = get_current_account(doc.to_warehouse)
+            if(from_current_warehouse != to_current_warehouse):
+                frappe.throw(_('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
             
