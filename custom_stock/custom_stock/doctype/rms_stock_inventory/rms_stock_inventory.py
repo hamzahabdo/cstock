@@ -61,7 +61,7 @@ def dispose_of_goods(items, account, warehouse, doc_name):
         if(hasattr(data, "items")):
             data.insert()
             ref = data.name
-            data.submit()
+            # data.submit()
             frappe.db.set_value(
                 'RMS Stock Inventory', doc_name.name, 'stock_item_release_reference', ref)
 
@@ -88,7 +88,7 @@ def supply_of_goods(items, account, warehouse, doc_name):
         if(hasattr(data, "items")):
             data.insert()
             ref = data.name
-            data.submit()
+            # data.submit()
             frappe.db.set_value(
                 'RMS Stock Inventory', doc_name.name, 'stock_item_supply_reference', ref)
 
