@@ -123,3 +123,14 @@ def get_stock_ledger_entries(doc):
         negative, da["settlement_account"], da["warehouse"], rms_s_i)
     supply_of_goods(positive, da["settlement_account"],
                     da["warehouse"], rms_s_i)
+
+
+@frappe.whitelist()
+def get_all_items(warehouse, posting_date):
+    sql = """SELECT DISTINCT(sle.item_code),ti.stock_uom,ti.item_name
+            FROM `tabStock Ledger Entry` sle
+                        join `tabItem` ti ON ti.item_code = sle.item_code
+            WHERE sle.posting_date = '{0}'
+            AND sle.warehouse = '{1}'
+            AND ti.is_insurance_item = 0""".format(posting_date, warehouse)
+    return frappe.db.sql(sql, as_dict=True)

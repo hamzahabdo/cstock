@@ -22,10 +22,13 @@ frappe.ui.form.on("RMS Stock Inventory", {
 			frm.doc.stock_item_supply_reference === undefined &&
 			frm.doc.stock_item_release_reference === undefined
 		) {
-			frm.trigger("add_context_buttons");
+			frm.trigger("add_context_button");
+		}
+		if (frm.doc.docstatus === 0) {
+			frm.trigger("add_get_items_button");
 		}
 	},
-	add_context_buttons(frm) {
+	add_context_button(frm) {
 		frm.add_custom_button(__("Make Inventory"), () => {
 			frappe.warn(
 				"Confermation",
@@ -44,6 +47,44 @@ frappe.ui.form.on("RMS Stock Inventory", {
 				"Continue",
 				false
 			);
+		});
+	},
+	add_get_items_button(frm) {
+		let tmp_list = [];
+		let data = [];
+		let duplicate_elements = [];
+		frm.add_custom_button(__("Get Items"), () => {
+			frappe.call({
+				method: "custom_stock.custom_stock.doctype.rms_stock_inventory.rms_stock_inventory.get_all_items",
+				args: {
+					warehouse: frm.doc.warehouse,
+					posting_date: frm.doc.posting_date,
+				},
+				callback: (r) => {
+					data = r.message;
+					tmp_list = [...data];
+					for (let i = 0; i < data.length; i++) {
+						for (let y = 0; y < frm.doc.items.length; y++) {
+							if (
+								data[i].item_code === frm.doc.items[y].item_code
+							) {
+								duplicate_elements.push(i);
+							}
+						}
+					}
+					if (duplicate_elements.length > 0) {
+						add_non_existent_items(
+							frm,
+							fillter_duplicate_items(
+								tmp_list,
+								duplicate_elements
+							)
+						);
+					} else {
+						add_non_existent_items(frm, tmp_list);
+					}
+				},
+			});
 		});
 	},
 });
@@ -122,6 +163,31 @@ function fill_child_table_fields(frm, cdt, cdn) {
 			refresh_child_table_fields(frm);
 		},
 	});
+}
+
+function add_non_existent_items(frm, items) {
+	if (items.length > 0) {
+		for (let i = 0; i < items.length; i++) {
+			frm.add_child("items", {
+				item_code: items[i].item_code,
+				uom: items[i].stock_uom,
+				stock_uom: items[i].stock_uom,
+				item_name: items[i].item_name,
+				qty: 0,
+				conversion_factor: 1,
+				stock_qty: 0,
+			});
+		}
+		cur_frm.save();
+	}
+}
+function fillter_duplicate_items(items, index_list) {
+	let tmp_list = [];
+	tmp_list = items;
+	for (let i = index_list.length - 1; i >= 0; i--) {
+		tmp_list.splice(index_list[i], 1);
+	}
+	return tmp_list;
 }
 function refresh_child_table_fields(frm) {
 	frm.refresh_fields("uom");
