@@ -82,8 +82,7 @@
    "fieldname": "stock_item_release_reference",
    "fieldtype": "Link",
    "label": "Stock Item Release Reference",
-   "options": "Stock Entry",
-   "read_only": 1
+   "options": "Stock Entry"
   },
   {
    "fieldname": "column_break_11",
@@ -93,8 +92,7 @@
    "fieldname": "stock_item_supply_reference",
    "fieldtype": "Link",
    "label": "Stock Item Supply Reference",
-   "options": "Stock Entry",
-   "read_only": 1
+   "options": "Stock Entry"
   },
   {
    "fieldname": "description",
@@ -109,7 +107,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-25 02:48:27.456636",
+ "modified": "2022-04-28 15:09:06.736695",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "RMS Stock Inventory",
