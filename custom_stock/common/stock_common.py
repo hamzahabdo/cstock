@@ -646,7 +646,7 @@ def validate_add_to_transit(doc, method):
                 frappe.throw(
                     _('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
 
-# this validation will trigger befor save on Purchase Order and Purchase Receipt
+# this validation will trigger befor save on Purchase Order and Purchase Receipt and Material Request
 
 
 def CheckConversionFactor(doc, method):
