@@ -130,7 +130,7 @@ def get_all_items(warehouse, posting_date):
     sql = """SELECT DISTINCT(sle.item_code),ti.stock_uom,ti.item_name
             FROM `tabStock Ledger Entry` sle
                         join `tabItem` ti ON ti.item_code = sle.item_code
-            WHERE sle.posting_date = '{0}'
+            WHERE sle.posting_date <= '{0}'
             AND sle.warehouse = '{1}'
             AND ti.is_insurance_item = 0""".format(posting_date, warehouse)
     return frappe.db.sql(sql, as_dict=True)
