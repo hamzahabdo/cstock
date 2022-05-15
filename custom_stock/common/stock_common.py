@@ -192,7 +192,7 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
     from erpnext.accounts.general_ledger import process_gl_map
 
     processed_gl_map = process_gl_map(gl_list)
-    if self.get("purpose") == "Material Transfer" and ( self.get("add_to_transit") or self.get("outgoing_stock_entry") ):
+    if self.get("purpose") == "Material Transfer" and (self.get("add_to_transit") or self.get("outgoing_stock_entry")):
         for entry in processed_gl_map:
             # intermediate_warehouse = frappe.get_doc(
             #     "NCITY Settings").intermediate_warehouse
@@ -200,12 +200,12 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
                 "Warehouse", self.source_warehouse).default_in_transit_warehouse
             # intermediate_account = frappe.get_doc(
             #     "Warehouse", intermediate_warehouse).account
-            
+
             intermediate_account = frappe.get_doc(
                 "Warehouse", intermediate_warehouse).account
             target_current_account = get_current_account(self.target_warehouse)
             source_current_account = get_current_account(self.source_warehouse)
-            
+
             if not (source_current_account == target_current_account):
                 if(entry.account == intermediate_account):
                     current_account = None
@@ -217,10 +217,10 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
                     elif(self.get("purpose") == "Material Transfer" and self.outgoing_stock_entry):
                         # current_account = get_current_account(self.source_warehouse)
                         current_account = source_current_account
-                    
+
                     intermediate = entry.copy()
                     intermediate.account = current_account
-                    
+
                     processed_gl_map.append(intermediate)
 
                     if(entry.credit > 0):
@@ -243,8 +243,7 @@ def validate_stock_keeper(doc, method):
             if(frappe.session.user == keeper.user and keeper.send_to_warehouse):
                 valid = True
                 break
-        
-        
+
     elif((doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt"):
         message = "Sorry, You can not receive at this warehouse"
         keepers = frappe.get_doc(
@@ -253,7 +252,7 @@ def validate_stock_keeper(doc, method):
             if(frappe.session.user == keeper.user and keeper.receive_at_warehouse):
                 valid = True
                 break
-    
+
     # elif(doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
     #     from_warehouse = doc.from_warehouse
     #     if(not from_warehouse):
@@ -286,7 +285,7 @@ def validate_stock_keeper(doc, method):
     #     # for keeper in keepers:
     #     #     if(frappe.session.user == keeper.user and keeper.receive_at_warehouse):
     #     #         valid = True
-    #     #         break 
+    #     #         break
     #     #     else:
     #     #         message = "Sorry, You can not receive at this warehouse"
 
@@ -581,6 +580,7 @@ def get_warehouse_acronym(wname):
     print(frappe.as_json(warehouse.short_name))
     return warehouse.short_name
 
+
 @frappe.whitelist()
 def get_in_transit_warehous(wname):
     warehouse = frappe.get_doc('Warehouse', wname)
@@ -637,12 +637,18 @@ def search_serial_or_batch_or_barcode_number(search_value):
     return {}
 
 
-
-def validate_add_to_transit(doc,method):
+def validate_add_to_transit(doc, method):
     if(doc.purpose == 'Material Transfer' and not doc.outgoing_stock_entry and not doc.add_to_transit):
         if(doc.from_warehouse and doc.to_warehouse):
             from_current_warehouse = get_current_account(doc.from_warehouse)
             to_current_warehouse = get_current_account(doc.to_warehouse)
             if(from_current_warehouse != to_current_warehouse):
-                frappe.throw(_('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
-            
+                frappe.throw(
+                    _('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
+
+
+def CheckConversionFactor(doc, method):
+    for i in doc.items:
+        if i.uom != i.stock_uom and i.conversion_factor == 1:
+            frappe.throw(
+                "Check the Conversion Factor for Item Code:{0}".format(i.item_code))

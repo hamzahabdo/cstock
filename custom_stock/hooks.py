@@ -111,17 +111,19 @@ doc_events = {
     "Stock Entry": {
         # "on_submit": "custom_stock.common.stock_common.make_current_account_entries",
         "on_cancel": "custom_stock.common.stock_common.check_future_transactions",
+        "before_save": "custom_stock.common.custom_stock_entry.CheckConversionFactor",
         "validate": [
                      "custom_stock.common.stock_common.validate_add_to_transit",
                      "custom_stock.common.stock_common.assign_override_methods",
                      "custom_stock.common.stock_common.validate_stock_keeper",
                      "custom_stock.common.stock_common.set_branch",
                      "custom_stock.common.stock_common.validate_for_items"
-                     ]
+        ]
     },
     "Purchase Receipt": {
         "validate": "custom_stock.common.stock_common.assign_override_methods",
-        "on_cancel": "custom_stock.common.stock_common.assign_override_methods"
+        "on_cancel": "custom_stock.common.stock_common.assign_override_methods",
+        "before_save": "custom_stock.common.stock_common.CheckConversionFactor"
     },
     "Purchase Invoice": {
         "validate": "custom_stock.common.stock_common.assign_override_methods",

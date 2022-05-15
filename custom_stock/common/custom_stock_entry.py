@@ -31,3 +31,10 @@ def GetItemScrap(warehouse):
         formated_data.append(
             {"item_code": i["item_scrap"], 'uom': i['uom'], 'conversion_factor': data["conversion_factor"]})
     return GetQty(formated_data, warehouse)
+
+
+def CheckConversionFactor(doc, method):
+    for i in doc.items:
+        if i.uom != i.stock_uom and i.conversion_factor == 1:
+            frappe.throw(
+                "Check the Conversion Factor for Item Code:{0}".format(i.item_code))
