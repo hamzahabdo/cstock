@@ -1,4 +1,3 @@
-import re
 from frappe.model.document import Document
 import frappe
 from frappe import _, parse_json
@@ -16,9 +15,32 @@ def GetBranch(warehouse):
 
 
 @frappe.whitelist()
-def get_item_uom(item_code):
-    return frappe.get_all("UOM Conversion Detail", filters={
+def get_item_uom(doc, item_code):
+    da = frappe.get_all("UOM Conversion Detail", filters={
         "parent": item_code}, fields=["uom", "conversion_factor"])
+    da.append(get_current_qty(doc, item_code))
+    return da
+
+
+def get_current_qty(doc, item_code):
+    tmp_opj = {}
+    da = parse_json(doc)
+    p_t = 0
+    post_time = da["posting_time"].split()
+    if(len(post_time) == 1):
+        p_t = post_time[0]
+    else:
+        p_t = post_time[1]
+    previous_sle = get_previous_sle({
+        "item_code": item_code,
+        "warehouse": da["warehouse"],
+        "posting_date": da["posting_date"],
+        "posting_time": p_t
+    })
+
+    tmp_opj.update(
+        {"qty_after_transaction": previous_sle["qty_after_transaction"]})
+    return tmp_opj
 
 
 @frappe.whitelist()
@@ -126,11 +148,18 @@ def get_stock_ledger_entries(doc):
 
 
 @frappe.whitelist()
-def get_all_items(warehouse, posting_date):
+def get_all_items(doc):
+    tmp_list = []
+    da = parse_json(doc)
     sql = """SELECT DISTINCT(sle.item_code),ti.stock_uom,ti.item_name
             FROM `tabStock Ledger Entry` sle
                         join `tabItem` ti ON ti.item_code = sle.item_code
             WHERE sle.posting_date <= '{0}'
             AND sle.warehouse = '{1}'
-            AND ti.is_insurance_item = 0""".format(posting_date, warehouse)
-    return frappe.db.sql(sql, as_dict=True)
+            AND ti.is_insurance_item = 0""".format(da["posting_date"], da["warehouse"])
+    data = frappe.db.sql(sql, as_dict=True)
+    for i in data:
+        x = get_current_qty(doc, i['item_code'])
+        i.update(x)
+        tmp_list.append(i)
+    return tmp_list

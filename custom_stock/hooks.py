@@ -137,7 +137,10 @@ doc_events = {
     },
     "Stock Ledger Entry": {
         "before_save": "custom_stock.common.custom_stock_ledger_entry.check_actual_qty"
-    }
+    },
+    "RMS Stock Inventory": {
+        "before_save": "custom_stock.common.stock_common.CheckConversionFactor"
+    },
 }
 
 # Scheduled Tasks
