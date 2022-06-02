@@ -80,13 +80,14 @@
    "fieldname": "current_quantity",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Current Quantity"
+   "label": "Current Quantity",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2022-05-28 11:04:51.909057",
+ "modified": "2022-06-02 16:08:29.302227",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "RMS Item Inventory",
