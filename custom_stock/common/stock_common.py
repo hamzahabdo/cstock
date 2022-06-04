@@ -650,10 +650,12 @@ def validate_add_to_transit(doc, method):
 
 
 def CheckConversionFactor(doc, method):
+
     for i in doc.items:
+        print(type(i.conversion_factor))
         if i.uom != i.stock_uom and i.conversion_factor == 1:
             frappe.throw(
                 "Check the Conversion Factor for Item Code:{0}".format(i.item_code))
-        elif i.uom == i.stock_uom and i.conversion_factor != 1:
-            frappe.throw(
-                "The Conversion Factor for Item Code:{0} should be 1".format(i.item_code))
+        # elif i.uom == i.stock_uom and i.conversion_factor != 1:
+        #     frappe.throw(
+        #         "The Conversion Factor for Item Code:{0} should be 1".format(i.item_code))
