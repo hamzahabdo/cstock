@@ -9,15 +9,17 @@ class RMSStockInventory(Document):
 
 
 def GetBranch(warehouse):
-    Branch = frappe.get_all("Warehouse", filters={
-                            "name": warehouse}, fields=["branch"])
+    Branch = frappe.get_all("Warehouse",
+                            filters={"name": warehouse},
+                            fields=["branch"])
     return Branch[0]["branch"]
 
 
 @frappe.whitelist()
 def get_item_uom(doc, item_code):
-    da = frappe.get_all("UOM Conversion Detail", filters={
-        "parent": item_code}, fields=["uom", "conversion_factor"])
+    da = frappe.get_all("UOM Conversion Detail",
+                        filters={"parent": item_code},
+                        fields=["uom", "conversion_factor"])
     da.append(get_current_qty(doc, item_code))
     return da
 
@@ -27,7 +29,7 @@ def get_current_qty(doc, item_code):
     da = parse_json(doc)
     p_t = 0
     post_time = da["posting_time"].split()
-    if(len(post_time) == 1):
+    if (len(post_time) == 1):
         p_t = post_time[0]
     else:
         p_t = post_time[1]
@@ -37,7 +39,8 @@ def get_current_qty(doc, item_code):
         "posting_date": da["posting_date"],
         "posting_time": p_t
     })
-
+    if not previous_sle:
+        previous_sle["qty_after_transaction"] = 0.0
     tmp_opj.update(
         {"qty_after_transaction": previous_sle["qty_after_transaction"]})
     return tmp_opj
@@ -45,16 +48,21 @@ def get_current_qty(doc, item_code):
 
 @frappe.whitelist()
 def get_conversion(item_code, uom):
-    return frappe.get_all("UOM Conversion Detail", filters={"parent": item_code, "uom": uom}, fields=["conversion_factor"])
+    return frappe.get_all("UOM Conversion Detail",
+                          filters={
+                              "parent": item_code,
+                              "uom": uom
+                          },
+                          fields=["conversion_factor"])
 
 
 def filter_uom(items):
     tmp_obj = {}
     for i in items:
         for y in i:
-            if(y["item_code"] in tmp_obj.keys()):
-                tmp_obj[y["item_code"]
-                        ]["stock_qty"] = tmp_obj[y["item_code"]]["stock_qty"]+y["stock_qty"]
+            if (y["item_code"] in tmp_obj.keys()):
+                tmp_obj[y["item_code"]]["stock_qty"] = tmp_obj[
+                    y["item_code"]]["stock_qty"] + y["stock_qty"]
             else:
                 x = {y["item_code"]: y}
                 tmp_obj.update(x)
@@ -72,20 +80,22 @@ def dispose_of_goods(items, account, warehouse, doc_name):
         data.sw = frappe.get_doc('Warehouse', warehouse).short_name
         data.tw = frappe.get_doc('Warehouse', warehouse).short_name
         for i in items:
-            if(i["stock_qty"] > 0):
-                data.append('items', {
-                            "item_code": i["item_code"],
-                            "qty": i["stock_qty"],
-                            "transfer_qty": i["stock_qty"],
-                            "uom": i["stock_uom"],
-                            "s_warehouse": warehouse,
-                            "branch": GetBranch(warehouse)})
-        if(hasattr(data, "items")):
+            if (i["stock_qty"] > 0):
+                data.append(
+                    'items', {
+                        "item_code": i["item_code"],
+                        "qty": i["stock_qty"],
+                        "transfer_qty": i["stock_qty"],
+                        "uom": i["stock_uom"],
+                        "s_warehouse": warehouse,
+                        "branch": GetBranch(warehouse)
+                    })
+        if (hasattr(data, "items")):
             data.insert()
             ref = data.name
             # data.submit()
-            frappe.db.set_value(
-                'RMS Stock Inventory', doc_name.name, 'stock_item_release_reference', ref)
+            frappe.db.set_value('RMS Stock Inventory', doc_name.name,
+                                'stock_item_release_reference', ref)
 
 
 def supply_of_goods(items, account, warehouse, doc_name):
@@ -99,23 +109,25 @@ def supply_of_goods(items, account, warehouse, doc_name):
         data.sw = frappe.get_doc('Warehouse', warehouse).short_name
         data.tw = frappe.get_doc('Warehouse', warehouse).short_name
         for i in items:
-            if(i["stock_qty"] > 0):
-                data.append('items', {
-                            "item_code": i["item_code"],
-                            "qty": i["stock_qty"],
-                            "transfer_qty": i["stock_qty"],
-                            "uom": i["stock_uom"],
-                            "t_warehouse": warehouse,
-                            "branch": GetBranch(warehouse)})
-        if(hasattr(data, "items")):
+            if (i["stock_qty"] > 0):
+                data.append(
+                    'items', {
+                        "item_code": i["item_code"],
+                        "qty": i["stock_qty"],
+                        "transfer_qty": i["stock_qty"],
+                        "uom": i["stock_uom"],
+                        "t_warehouse": warehouse,
+                        "branch": GetBranch(warehouse)
+                    })
+        if (hasattr(data, "items")):
             data.insert()
             ref = data.name
             # data.submit()
-            frappe.db.set_value(
-                'RMS Stock Inventory', doc_name.name, 'stock_item_supply_reference', ref)
+            frappe.db.set_value('RMS Stock Inventory', doc_name.name,
+                                'stock_item_supply_reference', ref)
 
 
-@ frappe.whitelist()
+@frappe.whitelist()
 def get_stock_ledger_entries(doc):
     positive = []
     negative = []
@@ -134,17 +146,17 @@ def get_stock_ledger_entries(doc):
         })
         # get actual stock at source warehouse
         qty_after_transaction = previous_sle.get("qty_after_transaction") or 0
-        amount = qty_after_transaction-items[i]["stock_qty"]
+        amount = qty_after_transaction - items[i]["stock_qty"]
         if amount < 0:
             items[i]["stock_qty"] = abs(amount)
             positive.append(items[i])
         else:
             items[i]["stock_qty"] = amount
             negative.append(items[i])
-    dispose_of_goods(
-        negative, da["settlement_account"], da["warehouse"], rms_s_i)
-    supply_of_goods(positive, da["settlement_account"],
-                    da["warehouse"], rms_s_i)
+    dispose_of_goods(negative, da["settlement_account"], da["warehouse"],
+                     rms_s_i)
+    supply_of_goods(positive, da["settlement_account"], da["warehouse"],
+                    rms_s_i)
 
 
 @frappe.whitelist()
@@ -156,7 +168,8 @@ def get_all_items(doc):
                         join `tabItem` ti ON ti.item_code = sle.item_code
             WHERE sle.posting_date <= '{0}'
             AND sle.warehouse = '{1}'
-            AND ti.is_insurance_item = 0""".format(da["posting_date"], da["warehouse"])
+            AND ti.is_insurance_item = 0""".format(da["posting_date"],
+                                                   da["warehouse"])
     data = frappe.db.sql(sql, as_dict=True)
     for i in data:
         x = get_current_qty(doc, i['item_code'])
