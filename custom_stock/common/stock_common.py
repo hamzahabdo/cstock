@@ -652,7 +652,7 @@ def validate_add_to_transit(doc, method):
 
 def CheckConversionFactor(doc, method):
     for i in doc.items:
-        if i.uom != i.stock_uom and int(i.conversion_factor) == 1:
+        if i.uom != i.stock_uom and float(i.conversion_factor) == 1:
             frappe.throw(
                 "Check the Conversion Factor for Item Code:{0}".format(i.item_code))
         elif i.uom == i.stock_uom and int(i.conversion_factor) != 1:
