@@ -1,0 +1,43 @@
+{
+ "creation": "2020-02-10 15:53:55.966334",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "price_list",
+  "ratio",
+  "minimum__rate"
+ ],
+ "fields": [
+  {
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "fieldname": "ratio",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Ratio"
+  },
+  {
+   "fieldname": "minimum__rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Minimum  Rate"
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-05-12 14:43:46.380558",
+ "modified_by": "Administrator",
+ "module": "Custom Stock",
+ "name": "Pricing List",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
