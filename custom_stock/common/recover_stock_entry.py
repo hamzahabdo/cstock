@@ -132,9 +132,11 @@ def check_current_account_between_branches_in_gle(transactions,deploy_changes):
 
 
 
-# await frappe.call({
-#     method: 'rstrnt.custom_restaurant.common.recover_stock_entry.recover_stock_entry',
-#     args: {},
+
+
+# frappe.call({
+#     method: 'custom_stock.common.recover_stock_entry.recover_stock_entry',
+#     args: {between_branches:false ,to_date:'2022-08-20',deploy_changes:False},
     
 #     freeze: true,
 #     callback: (r) => {
