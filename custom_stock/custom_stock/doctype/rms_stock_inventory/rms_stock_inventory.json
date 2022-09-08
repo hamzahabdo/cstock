@@ -46,12 +46,15 @@
    "default": "Today",
    "fieldname": "posting_date",
    "fieldtype": "Date",
-   "label": "Posting Date"
+   "label": "Posting Date",
+   "reqd": 1
   },
   {
+   "default": "now",
    "fieldname": "posting_time",
    "fieldtype": "Time",
-   "label": "Posting Time"
+   "label": "Posting Time",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_6",
@@ -107,7 +110,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-28 15:09:06.736695",
+ "modified": "2022-06-01 20:57:22.347728",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "RMS Stock Inventory",

@@ -1,0 +1,88 @@
+{
+ "creation": "2020-02-12 21:31:08.803155",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item",
+  "item_name",
+  "price_list",
+  "valuation",
+  "profit",
+  "rate",
+  "minimum_rate",
+  "item_price"
+ ],
+ "fields": [
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item",
+   "options": "Item"
+  },
+  {
+   "fetch_from": "item.item_name",
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name"
+  },
+  {
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "columns": 1,
+   "fieldname": "rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Rate",
+   "reqd": 1
+  },
+  {
+   "columns": 1,
+   "fieldname": "valuation",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Valuation",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "profit",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Profit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "item_price",
+   "fieldtype": "Link",
+   "label": "Item Price",
+   "options": "Item Price",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "minimum_rate",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Minimum Rate",
+   "reqd": 1
+  }
+ ],
+ "istable": 1,
+ "modified": "2020-06-02 17:49:42.568846",
+ "modified_by": "arar@burjalmaha.com",
+ "module": "Custom Stock",
+ "name": "Pricing Priced Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

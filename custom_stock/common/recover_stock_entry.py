@@ -112,5 +112,26 @@ def check_current_account_between_branches_in_gle(transactions, deploy_changes):
             stock_entries.append(transaction.name)
             fix_gl_entry_for_stock_entry(transaction.name, deploy_changes)
 
+<<<<<<< HEAD
     # print(len(stock_entries),'000000000',len(transactions),len(current_stock_entries))
     return stock_entries
+=======
+
+
+
+
+
+
+# frappe.call({
+#     method: 'custom_stock.common.recover_stock_entry.recover_stock_entry',
+#     args: {between_branches:false ,to_date:'2022-08-20',deploy_changes:False},
+    
+#     freeze: true,
+#     callback: (r) => {
+#         console.log(r)
+#     },
+#     error: (r) => {
+#          console.log(r)
+#     }
+# })
+>>>>>>> 8f98480becc485eb9418ef6cd5c728fddcd2122d

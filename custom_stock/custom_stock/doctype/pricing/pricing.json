@@ -1,0 +1,161 @@
+{
+ "allow_rename": 1,
+ "creation": "2020-02-10 16:01:16.501591",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "get_from",
+  "date",
+  "column_break_3",
+  "purchase_invoice",
+  "stock_transfer",
+  "purchase_receipt",
+  "discount_batch",
+  "section_break_7",
+  "is_ratio",
+  "ratio",
+  "column_break_10",
+  "min_rate_is_ratio",
+  "value",
+  "section_break_8",
+  "price_lists",
+  "get_items",
+  "priced_items",
+  "items"
+ ],
+ "fields": [
+  {
+   "fieldname": "get_from",
+   "fieldtype": "Select",
+   "label": "Get From",
+   "options": "Purchase Invoice\nStock Entry\nPurchase Receipt\nDiscount Batch",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "date",
+   "fieldtype": "Date",
+   "label": "Date"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.get_from == 'Purchase Invoice'",
+   "fieldname": "purchase_invoice",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Purchase Invoice",
+   "options": "Purchase Invoice"
+  },
+  {
+   "depends_on": "eval:doc.get_from == 'Stock Entry'",
+   "fieldname": "stock_transfer",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Stock Transfer",
+   "options": "Stock Entry"
+  },
+  {
+   "depends_on": "eval:doc.get_from == 'Purchase Receipt'",
+   "fieldname": "purchase_receipt",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Purchase Receipt",
+   "options": "Purchase Receipt"
+  },
+  {
+   "fieldname": "ratio",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Rate Ratio/Value"
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval:doc.ratio >= 0",
+   "fieldname": "price_lists",
+   "fieldtype": "Table",
+   "label": "Price Lists",
+   "options": "Pricing List"
+  },
+  {
+   "fieldname": "get_items",
+   "fieldtype": "Button",
+   "label": "Get Items"
+  },
+  {
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Items",
+   "options": "Pricing Item"
+  },
+  {
+   "fieldname": "priced_items",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Priced Items",
+   "options": "Pricing Priced Item"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_ratio",
+   "fieldtype": "Check",
+   "label": "Is Ratio"
+  },
+  {
+   "default": "1",
+   "fieldname": "min_rate_is_ratio",
+   "fieldtype": "Check",
+   "label": "Minimum Rate is Ratio"
+  },
+  {
+   "fieldname": "value",
+   "fieldtype": "Float",
+   "label": "Minimum Rate Ratio/Value"
+  },
+  {
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_10",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.get_from == 'Discount Batch'",
+   "fieldname": "discount_batch",
+   "fieldtype": "Link",
+   "label": "Discount Batch",
+   "options": "Discount Batch"
+  }
+ ],
+ "modified": "2021-01-16 16:51:19.253068",
+ "modified_by": "Administrator",
+ "module": "Custom Stock",
+ "name": "Pricing",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1,
+ "track_seen": 1
+}
