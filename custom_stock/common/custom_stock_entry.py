@@ -1,3 +1,5 @@
+# Copyright (c) 2022,burjalmaha Team and Contributors
+
 from __future__ import unicode_literals
 from warnings import filters
 import frappe
@@ -13,7 +15,6 @@ def GetQty(item_code_list, warehouse, uom=None):
         if qty > 0:
             data.append({"item_code": i["item_code"], "UOM": i["uom"],
                         "qty": qty, "conversion_factor": i["conversion_factor"]})
-        # data.setdefault(i["item_scrap"], {}).update({"item_code":i["item_scrap"],"qty":y})
     return data
 
 

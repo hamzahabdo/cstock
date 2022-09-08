@@ -25,10 +25,5 @@ def check_actual_qty(doc, method):
     # validate qty during submit
     if abs(flt((doc.actual_qty))) > flt(qty_after_transaction):
 
-        frappe.throw(_("Row {0}: Quantity not available for {3} in warehouse {1} at posting time of the entry ({2})").format(doc.idx,
-                                                                                                                             frappe.bold(
-                                                                                                                                 doc.warehouse),
-                                                                                                                             format_time(doc.posting_time), frappe.bold(doc.item_code))
-                     + '<br><br>' + _("Available quantity is {0}, you need {1}").format(frappe.bold(doc.actual_qty),
-                                                                                        frappe.bold(qty_after_transaction)),
-                     NegativeStockError, title=_('Insufficient Stock'))
+        frappe.throw(_("Row {0}: Quantity not available for {3} in warehouse {1} at posting time of the entry ({2})").format(doc.idx, frappe.bold(doc.warehouse), format_time(doc.posting_time), frappe.bold(doc.item_code))
+                     + '<br><br>' + _("Available quantity is {0}, you need {1}").format(frappe.bold(doc.actual_qty), frappe.bold(qty_after_transaction)), NegativeStockError, title=_('Insufficient Stock'))
