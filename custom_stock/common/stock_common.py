@@ -1,8 +1,9 @@
+# Copyright (c) 2022,burjalmaha Team and Contributors
+
 from __future__ import unicode_literals
 from traceback import print_tb
 import frappe
 from frappe import _
-# #### from stock common in ncity
 from erpnext.stock.utils import get_latest_stock_qty
 from erpnext.stock.utils import get_stock_balance
 from frappe.utils import flt, cstr, cint
@@ -39,7 +40,7 @@ def get_intermediate_account(doc):
 
 
 def make_current_account_entries(doc, method):
-    # if doc.get("purpose") == "Send to Warehouse" or doc.get("purpose") == "Receive at Warehouse":
+
     if doc.get("purpose") == "Material Transfer":
         gl_entries = []
         current_account = None
@@ -54,30 +55,15 @@ def make_current_account_entries(doc, method):
             frappe.throw(_('Could not make current account entries'))
         entries = frappe.get_list(
             "GL Entry", filters={"voucher_no": doc.name, "account": intermediate_account})
-        print("==========================",
-              intermediate_account, current_account)
-        print(entries)
+
         intermediate_account_entry = frappe.get_doc("GL Entry", entries[0])
         gl_entries.append(make_gl_entry(
             doc, intermediate_account_entry, current_account, False))
         gl_entries.append(make_gl_entry(
             doc, intermediate_account_entry, intermediate_account, True))
 
-        # if gl_entries:
         from erpnext.accounts.general_ledger import make_gl_entries
         make_gl_entries(gl_entries)
-
-
-# @frappe.whitelist()
-# def fix_current_account(name):
-#     doc = frappe.get_doc("Stock Entry", name)
-#     make_current_account_entries(doc, "")
-
-
-@frappe.whitelist()
-def test(name):
-    print('----------------------')
-    print(name)
 
 
 def get_future_stock_vouchers(posting_date, posting_time, for_warehouses=None, for_items=None):
@@ -111,7 +97,6 @@ def check_future_transactions(doc, method):
     if(frappe.get_single("Common Stock Setting").disable_future_stock_transaction_check):
         return
     items, warehouses = doc.get_items_and_warehouses()
-    # from erpnext.controllers.stock_controller import get_future_stock_vouchers
     future_stock_vouchers = get_future_stock_vouchers(
         doc.posting_date, doc.posting_time, warehouses, items)
     if future_stock_vouchers:
@@ -150,12 +135,6 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
                     # from warehouse account
 
                     self.check_expense_account(item_row)
-
-                    # If the item does not have the allow zero valuation rate flag set
-                    # and ( valuation rate not mentioned in an incoming entry
-                    # or incoming entry not found while delivering the item),
-                    # try to pick valuation rate from previous sle or Item master and update in SLE
-                    # Otherwise, throw an exception
 
                     if not sle.stock_value_difference and self.doctype != "Stock Reconciliation" \
                             and not item_row.get("allow_zero_valuation_rate"):
@@ -199,8 +178,6 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
             #     "NCITY Settings").intermediate_warehouse
             intermediate_warehouse = frappe.get_doc(
                 "Warehouse", self.source_warehouse).default_in_transit_warehouse
-            # intermediate_account = frappe.get_doc(
-            #     "Warehouse", intermediate_warehouse).account
 
             intermediate_account = frappe.get_doc(
                 "Warehouse", intermediate_warehouse).account
@@ -210,13 +187,11 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
             if not (source_current_account == target_current_account):
                 if(entry.account == intermediate_account):
                     current_account = None
-                    # if(self.get("purpose") == "Send to Warehouse"):
+
                     if(self.get("purpose") == "Material Transfer" and not self.outgoing_stock_entry):
-                        # current_account = get_current_account(self.target_warehouse)
                         current_account = target_current_account
 
                     elif(self.get("purpose") == "Material Transfer" and self.outgoing_stock_entry):
-                        # current_account = get_current_account(self.source_warehouse)
                         current_account = source_current_account
 
                     intermediate = entry.copy()
@@ -254,72 +229,8 @@ def validate_stock_keeper(doc, method):
                 valid = True
                 break
 
-    # elif(doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
-    #     from_warehouse = doc.from_warehouse
-    #     if(not from_warehouse):
-    #         for fw in doc.items:
-    #             if(fw.s_warehouse):
-    #                 from_warehouse = fw.s_warehouse
-    #             else:
-    #                 from_warehouse = doc.from_warehouse
-    #                 break
-    #     keepers = frappe.get_doc(
-    #         "Warehouse", from_warehouse).stock_keeper_users
-    #     for keeper in keepers:
-    #         if(frappe.session.user == keeper.user and keeper.send_to_warehouse):
-    #             valid = True
-    #             break
-    #         else:
-    #             message = "Sorry, You can not send from this warehouse"
-
-    #     # to_warehouse = doc.to_warehouse
-    #     # if(not to_warehouse):
-    #     #     for tw in doc.items:
-    #     #         if(tw.t_warehouse):
-    #     #             to_warehouse = tw.t_warehouse
-    #     #         else:
-    #     #             to_warehouse = doc.to_warehouse
-    #     #             break
-
-    #     # keepers = frappe.get_doc(
-    #     #         "Warehouse", to_warehouse).stock_keeper_users
-    #     # for keeper in keepers:
-    #     #     if(frappe.session.user == keeper.user and keeper.receive_at_warehouse):
-    #     #         valid = True
-    #     #         break
-    #     #     else:
-    #     #         message = "Sorry, You can not receive at this warehouse"
-
     if(not valid):
         frappe.throw(_(message))
-
-######################################################
-# stock common from nCity
-# ###############################
-
-
-# def get_price(price_list, item):
-#     return frappe.db.get_value('Item Price', {'selling': 1, 'price_list': price_list, 'item_code': item}, 'price_list_rate')
-
-
-# @frappe.whitelist()
-# def get_barcodes(name):
-#     stock_entry = frappe.get_doc('Stock Entry', name)
-#     barcodes = []
-#     for item in stock_entry.items:
-#         warehouse = frappe.get_doc('Warehouse', item.t_warehouse)
-#         branch = frappe.get_doc('Branch', warehouse.branch)
-#         price_list = frappe.get_doc(
-#             'Price List', branch.default_price_list)
-#         barcodes.append(
-#             {
-#                 'item_name': item.item_name,
-#                 'qty': item.qty,
-#                 'item_code': item.item_code,
-#                 'rate': get_price(price_list.name, item.item_code)
-#             }
-#         )
-#     return barcodes
 
 
 @frappe.whitelist()
@@ -337,14 +248,6 @@ def set_branch(doc, method):
         _branch = frappe.get_doc('Warehouse', doc.to_warehouse)
     else:
         from_warehouse = doc.from_warehouse
-        # if(not from_warehouse):
-        #     if(doc.purpose == "Material Transfer for Manufacture" or doc.purpose == "Manufacture"):
-        #         for fw in doc.items:
-        #             if(fw.s_warehouse):
-        #                 from_warehouse = fw.s_warehouse
-        #             else:
-        #                 from_warehouse = doc.from_warehouse
-        #                 break
         _branch = frappe.get_doc('Warehouse', from_warehouse)
 
     branch = _branch.branch
@@ -389,47 +292,6 @@ def get_negative_items(warehouse):
 
     return res
 
-# region Old Method
-# def get_negative_items(warehouse, posting_date, posting_time, company):
-#     lft, rgt = frappe.db.get_value("Warehouse", warehouse, ["lft", "rgt"])
-#     items = frappe.db.sql("""
-# 		select i.name, i.item_name, bin.warehouse
-# 		from tabBin bin, tabItem i
-# 		where i.name=bin.item_code and i.disabled=0 and i.is_stock_item = 1
-# 		and i.has_variants = 0 and i.has_serial_no = 0 and i.has_batch_no = 0
-# 		and exists(select name from `tabWarehouse` where lft >= %s and rgt <= %s and name=bin.warehouse)
-# 	""", (lft, rgt))
-
-#     items += frappe.db.sql("""
-# 		select i.name, i.item_name, id.default_warehouse
-# 		from tabItem i, `tabItem Default` id
-# 		where i.name = id.parent
-# 			and exists(select name from `tabWarehouse` where lft >= %s and rgt <= %s and name=id.default_warehouse)
-# 			and i.is_stock_item = 1 and i.has_serial_no = 0 and i.has_batch_no = 0
-# 			and i.has_variants = 0 and i.disabled = 0 and id.company=%s
-# 		group by i.name
-# 	""", (lft, rgt, company))
-
-#     res = []
-#     for d in set(items):
-#         stock_bal = get_stock_balance(
-#             d[0], d[2], posting_date, posting_time, with_valuation_rate=True)
-#         if stock_bal[0] < 0:
-#             if frappe.db.get_value("Item", d[0], "disabled") == 0:
-#                 res.append({
-#                     "item_code": d[0],
-#                     "warehouse": d[2],
-#                     "qty": stock_bal[0],
-#                     "item_name": d[1],
-#                     "valuation_rate": stock_bal[1],
-#                     "current_qty": stock_bal[0],
-#                     "current_valuation_rate": stock_bal[1]
-#                 })
-
-#     return res
-
-# endregion
-
 
 def ibmx(doctype, txt, searchfield, start, page_len, filters):
     conditions = []
@@ -442,8 +304,6 @@ def ibmx(doctype, txt, searchfield, start, page_len, filters):
             item_code[0], filters.get("stock_entry_type"))
         if qty > 0:
             conditions.append(item_code[0])
-
-#    conditions = tuple(conditions)
 
     item_code_list2 = frappe.db.sql(
         "select distinct(I.item_code) from `tabStock Reconciliation Item` I,`tabStock Reconciliation` R  where R.name=I.parent  and  R.warehouse='" + filters.get("stock_entry_type") + "' and purpose='Opening Stock'")
@@ -509,60 +369,6 @@ def get_inventory_items(warehouse, inventory, qty):
     return res
 
 
-# def delete_all_items():
-#     items = frappe.get_list("Item")
-#     for i in items:
-#         frappe.delete_doc("Item", i.name)
-#         print("%s: deleted" % i.name)
-
-
-# def import_item_barcodes(item_code):
-#     barcodes = frappe.get_list("Barcodes", filters={'item_code': item_code})
-#     idx = 1
-#     for b in barcodes:
-#         sql = """
-#         INSERT INTO `tabItem Barcode` (`name`, `owner`, `creation`, `modified`, `modified_by`, `parent`, `parentfield`, `parenttype`, `idx`, `docstatus`, `barcode`)
-#         VALUES ('%s', 'administrator', '2020-08-05 13:00:00', '2020-08-05 13:00:00', 'administrator', '%s', 'barcodes', 'Item', %s, 0, '%s')
-#         """ % (b.name, item_code, idx, b.name)
-#         frappe.db.sql(sql)
-#         idx += 1
-
-
-# def import_barcodes():
-#     sql = "select distinct item_code from tabBarcodes"
-#     result = frappe.db.sql(sql)
-#     for r in result:
-#         import_item_barcodes(r[0])
-#     frappe.db.commit()
-
-
-# def validate_item_code_and_barcodes(doc, method):
-
-#     # doc = frappe.get_doc("Item", item_name)
-#     for item_barcode in doc.barcodes:
-#         if item_barcode.parent == item_barcode.barcode:
-#             return
-#         validate_duplicate("Item", item_barcode.barcode)
-
-#     validate_duplicate("Item Barcode", doc.name)
-#     # if doc.name:
-#     #     if frappe.get_value("Item Barcode", doc.name, "name"):
-#     #         frappe.throw(_("Item Name {0} already used for another Item Barcode").format(
-#     #             doc.name))
-
-#     # if item_barcode.barcode:
-#     #     if frappe.get_value("Item", item_barcode.barcode, "name"):
-#     #         frappe.throw(_("Barcode {0} already used for another Item name").format(
-#     #             item_barcode.barcode))
-
-
-# def validate_duplicate(target_doctype, source_docname):
-#     if source_docname:
-#         if frappe.get_value(target_doctype, source_docname, "name"):
-#             frappe.throw(_("{0} is already used for another {1}").format(
-#                 source_docname, target_doctype))
-
-
 def validate_for_items(doc, method):
     check_list = []
     for d in doc.get("items"):
@@ -576,30 +382,21 @@ def validate_for_items(doc, method):
 @frappe.whitelist()
 def get_warehouse_acronym(wname):
     warehouse = frappe.get_doc('Warehouse', wname)
-    print('..........................................s')
-    print(wname)
-    print(frappe.as_json(warehouse.short_name))
     return warehouse.short_name
 
 
 @frappe.whitelist()
 def get_in_transit_warehous(wname):
     warehouse = frappe.get_doc('Warehouse', wname)
-    print('.............................transit')
-    print(warehouse.default_in_transit_warehouse)
     return warehouse.default_in_transit_warehouse
 
 
 @frappe.whitelist()
 def test_get_warehouse_acronym(wname):
     warehouse = frappe.get_doc('Warehouse', wname)
-    print('..........................................s')
-    print(wname, warehouse.default_in_transit_warehouse)
     message_dic = {"short_name": warehouse.short_name,
                    "transit_warehouse": warehouse.default_in_transit_warehouse}
     print(frappe.as_json(message_dic))
-    # message = frappe.as_json(warehouse.short_name,
-    #                          warehouse.default_in_transit_warehouse)
     message = frappe.as_json(message_dic)
     return message_dic
 
@@ -646,8 +443,6 @@ def validate_add_to_transit(doc, method):
             if(from_current_warehouse != to_current_warehouse):
                 frappe.throw(
                     _('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
-
-# this validation will trigger befor save on Purchase Order and Purchase Receipt and Material Request
 
 
 def CheckConversionFactor(doc, method):

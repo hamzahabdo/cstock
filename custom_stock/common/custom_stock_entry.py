@@ -1,3 +1,5 @@
+# Copyright (c) 2022,burjalmaha Team and Contributors
+
 from __future__ import unicode_literals
 from warnings import filters
 import frappe
