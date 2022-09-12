@@ -12,7 +12,8 @@ def GetQty(item_code_list, warehouse, uom=None):
         qty = get_stock_availability(i["item_code"], warehouse, uom)
         if qty > 0:
             data.append({"item_code": i["item_code"], "UOM": i["uom"],
-                        "qty": qty, "conversion_factor": i["conversion_factor"]})
+                        "qty": qty, "conversion_factor": i["conversion_factor"],
+                        'item_name': i['item_name']})
         # data.setdefault(i["item_scrap"], {}).update({"item_code":i["item_scrap"],"qty":y})
     return data
 
@@ -20,7 +21,7 @@ def GetQty(item_code_list, warehouse, uom=None):
 @frappe.whitelist(allow_guest=True)
 def GetItemScrap(warehouse):
     formated_data = []
-    sql = """select item_scrap,uom  from `tabScrap Item` as tsi
+    sql = """select item_scrap,uom, item_name  from `tabScrap Item` as tsi
             JOIN `tabCustom Stock Settings` as tcss ON tsi.parent = tcss.name
             where tcss.warehouse = '{0}'""".format(warehouse)
     x = frappe.db.sql(sql, as_dict=True)
@@ -29,7 +30,7 @@ def GetItemScrap(warehouse):
         data = frappe.db.get_list("UOM Conversion Detail", filters={
             "parent": i["item_scrap"], 'uom': i["uom"]}, fields=['conversion_factor'])[0]
         formated_data.append(
-            {"item_code": i["item_scrap"], 'uom': i['uom'], 'conversion_factor': data["conversion_factor"]})
+            {"item_code": i["item_scrap"], 'item_name': i["item_name"], 'uom': i['uom'], 'conversion_factor': data["conversion_factor"]})
     return GetQty(formated_data, warehouse)
 
 
