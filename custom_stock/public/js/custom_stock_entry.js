@@ -6,6 +6,11 @@ frappe.ui.form.on("Stock Entry", {
 		frm.events.add_context_buttons(frm);
 	},
 	get_item_scrap(frm) {
+		cur_frm.doc.expense_account = "";
+		frappe.db.get_value('Custom Stock Settings', {'warehouse': cur_frm.doc.warehouse}, "settlement_account").then((r) => {
+			cur_frm.doc.expense_account = r.message.settlement_account;
+			cur_frm.refresh_field("expense_account");
+		});
 		frappe.call({
 			method: "custom_stock.common.custom_stock_entry.GetItemScrap",
 			args: {
@@ -36,6 +41,7 @@ frappe.ui.form.on("Stock Entry", {
 				}
 			},
 		});
+
 	},
 	add_context_buttons(frm) {
 		if (frm.doc.from_warehouse && frm.doc.stock_entry_type)

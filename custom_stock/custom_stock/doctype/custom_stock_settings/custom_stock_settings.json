@@ -7,6 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "warehouse",
+  "settlement_account",
   "item"
  ],
  "fields": [
@@ -24,11 +25,18 @@
    "label": "Warehouse",
    "options": "Warehouse",
    "reqd": 1
+  },
+  {
+   "fieldname": "settlement_account",
+   "fieldtype": "Link",
+   "label": "Settlement Account",
+   "options": "Account",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-02-12 11:57:22.636764",
+ "modified": "2022-09-12 11:32:04.712812",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "Custom Stock Settings",
