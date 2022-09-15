@@ -173,19 +173,22 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 
     processed_gl_map = process_gl_map(gl_list)
     if self.get("purpose") == "Material Transfer" and (self.get("add_to_transit") or self.get("outgoing_stock_entry")):
-        for entry in processed_gl_map:
-            # intermediate_warehouse = frappe.get_doc(
-            #     "NCITY Settings").intermediate_warehouse
-            intermediate_warehouse = frappe.get_doc(
-                "Warehouse", self.source_warehouse).default_in_transit_warehouse
+        
+        # intermediate_warehouse = frappe.get_doc(
+        #     "NCITY Settings").intermediate_warehouse
+        intermediate_warehouse = frappe.get_doc(
+            "Warehouse", self.source_warehouse).default_in_transit_warehouse
 
-            intermediate_account = frappe.get_doc(
-                "Warehouse", intermediate_warehouse).account
-            target_current_account = get_current_account(self.target_warehouse)
-            source_current_account = get_current_account(self.source_warehouse)
+        intermediate_account = frappe.get_doc(
+            "Warehouse", intermediate_warehouse).account
+        target_current_account = get_current_account(self.target_warehouse)
+        source_current_account = get_current_account(self.source_warehouse)
 
-            if not (source_current_account == target_current_account):
+        if not (source_current_account == target_current_account):
+            flag = 0
+            for entry in processed_gl_map:
                 if(entry.account == intermediate_account):
+                    flag = 1
                     current_account = None
 
                     if(self.get("purpose") == "Material Transfer" and not self.outgoing_stock_entry):
@@ -204,6 +207,9 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
                     else:
                         entry.credit = entry.debit
                     break
+
+            if not flag:
+                frappe.throw("No Intermediate Warehouse Account")
 
     return processed_gl_map
 
