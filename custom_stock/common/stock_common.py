@@ -215,6 +215,9 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 
 
 def validate_stock_keeper(doc, method):
+    if frappe.session.user == "Administrator":
+        return
+    
     valid = False
     message = ""
     if((doc.purpose == "Material Transfer" and not doc.outgoing_stock_entry) or doc.purpose == "Material Issue" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
