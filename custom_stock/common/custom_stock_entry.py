@@ -5,10 +5,9 @@ from warnings import filters
 import frappe
 from frappe import _, whitelist
 from frappe.utils import data
-from rstrnt.custom_restaurant.overrides.pos_invoice.custom_pos_invoice import get_stock_availability
-
 
 def GetQty(item_code_list, warehouse, uom=None):
+    from rstrnt.custom_restaurant.overrides.pos_invoice.custom_pos_invoice import get_stock_availability
     data = []
     for i in item_code_list:
         qty = get_stock_availability(i["item_code"], warehouse, uom)
