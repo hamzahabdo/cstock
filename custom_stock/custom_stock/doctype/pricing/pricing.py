@@ -42,6 +42,7 @@ class Pricing(Document):
                                  'minimum_rate', item.minimum_rate)
 
         super().save(*args, **kwargs)
+
     @whitelist()
     def get_prices(self, source_name, source_type, price_lists, is_ratio, min_rate_is_ratio):
         source = frappe.get_doc(source_type, source_name)
@@ -98,7 +99,7 @@ class Pricing(Document):
                 'minimum_rate': item_minimum_rate,
                 'priced': False
             }
-        if(source_type == 'Discount Batch'):
+        if (source_type == 'Discount Batch'):
             rate = item_rate
             minimum_rate = item_rate
         else:
@@ -123,7 +124,7 @@ class Pricing(Document):
         item_price = frappe.db.get_list('Item Price', fields=['name', 'price_list_rate', 'minimum_rate'],
                                         filters={'item_code': item_code, 'valid_from': last_date_price[0].valid_from, 'price_list': price_list})
 
-        if(item_price):
+        if (item_price):
             return item_price[0]
         return None
 
@@ -147,7 +148,7 @@ def get_last_rate(doc):
 
 
 def validate_price_rate(doc, method):
-    settings = frappe.get_doc('NCITY Settings')
+    settings = frappe.get_doc('Custom Stock Setting')
     user_roles = frappe.get_roles(frappe.session.user)
 
     if settings.prevent_low_pricing and settings.pricing_role not in user_roles:
