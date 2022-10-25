@@ -1,0 +1,83 @@
+{
+  "actions": [],
+  "allow_rename": 1,
+  "creation": "2022-10-25 14:32:06.743940",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "default_source_warehouse",
+    "intermediate_warehouse",
+    "allow_multiple_items",
+    "column_break_4",
+    "pricing_role",
+    "pricing_percentage",
+    "prevent_low_pricing"
+  ],
+  "fields": [
+    {
+      "fieldname": "default_source_warehouse",
+      "fieldtype": "Link",
+      "label": "Default Source Warehouse",
+      "options": "Warehouse"
+    },
+    {
+      "fieldname": "intermediate_warehouse",
+      "fieldtype": "Link",
+      "label": "INTERMEDIATE WAREHOUSE",
+      "options": "Warehouse"
+    },
+    {
+      "default": "0",
+      "fieldname": "allow_multiple_items",
+      "fieldtype": "Check",
+      "label": "Allow Item to be added multiple times in a transaction"
+    },
+    {
+      "fieldname": "pricing_role",
+      "fieldtype": "Link",
+      "label": "PRICING LOWER THAN PURCHASE RATE ROLE",
+      "options": "Role"
+    },
+    {
+      "default": "0",
+      "fieldname": "prevent_low_pricing",
+      "fieldtype": "Check",
+      "label": "Prevent Pricing Lower Than Purchase Rate"
+    },
+    {
+      "default": "30",
+      "depends_on": "eval:doc.prevent_low_pricing",
+      "fieldname": "pricing_percentage",
+      "fieldtype": "Float",
+      "label": "Pricing Percentage"
+    },
+    {
+      "fieldname": "column_break_4",
+      "fieldtype": "Column Break"
+    }
+  ],
+  "index_web_pages_for_search": 1,
+  "issingle": 1,
+  "links": [],
+  "modified": "2022-10-25 14:43:15.640319",
+  "modified_by": "Administrator",
+  "module": "Custom Stock",
+  "name": "Custom Stock Setting",
+  "owner": "Administrator",
+  "permissions": [
+    {
+      "create": 1,
+      "delete": 1,
+      "email": 1,
+      "print": 1,
+      "read": 1,
+      "role": "System Manager",
+      "share": 1,
+      "write": 1
+    }
+  ],
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}
