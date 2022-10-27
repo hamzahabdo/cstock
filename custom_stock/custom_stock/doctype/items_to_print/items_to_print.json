@@ -1,0 +1,65 @@
+{
+  "creation": "2020-04-22 15:54:33.785288",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["item", "item_name", "barcode", "quantity", "item_price", "previous_price", "percentage_change"],
+  "fields": [
+    {
+      "fieldname": "item",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Item",
+      "options": "Item"
+    },
+    {
+      "fetch_from": "item.item_name",
+      "fieldname": "item_name",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Item Name",
+      "read_only": 1
+    },
+    {
+      "fieldname": "barcode",
+      "fieldtype": "Data",
+      "in_list_view": 1,
+      "label": "Barcode",
+      "read_only": 1
+    },
+    {
+      "fieldname": "quantity",
+      "fieldtype": "Int",
+      "in_list_view": 1,
+      "label": "Quantity"
+    },
+    {
+      "fieldname": "item_price",
+      "fieldtype": "Currency",
+      "in_list_view": 1,
+      "label": "Item Price",
+      "read_only": 1
+    },
+    {
+      "fieldname": "previous_price",
+      "fieldtype": "Currency",
+      "label": "Previous Price"
+    },
+    {
+      "fieldname": "percentage_change",
+      "fieldtype": "Percent",
+      "label": "Percentage Change"
+    }
+  ],
+  "istable": 1,
+  "modified": "2021-12-14 09:08:15.199734",
+  "modified_by": "Administrator",
+  "module": "Custom Stock",
+  "name": "Items To Print",
+  "owner": "arar@burjalmaha.com",
+  "permissions": [],
+  "quick_entry": 1,
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

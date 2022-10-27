@@ -45,10 +45,10 @@ def make_current_account_entries(doc, method):
         gl_entries = []
         current_account = None
         # if(doc.get("purpose") == "Send to Warehouse"):
-        if(not doc.get("outgoing_stock_entry")):
+        if (not doc.get("outgoing_stock_entry")):
             current_account = get_current_account(doc.target_warehouse)
         # elif(doc.get("purpose") == "Receive at Warehouse"):
-        elif(doc.get("outgoing_stock_entry")):
+        elif (doc.get("outgoing_stock_entry")):
             current_account = get_current_account(doc.source_warehouse)
         intermediate_account = get_intermediate_account(doc)
         if not (current_account and intermediate_account):
@@ -94,7 +94,7 @@ def get_future_stock_vouchers(posting_date, posting_time, for_warehouses=None, f
 def check_future_transactions(doc, method):
     # this function ensures transactions with future entries can not be canceled,
     # do not disable it until solving current account issue
-    if(frappe.get_single("Common Stock Setting").disable_future_stock_transaction_check):
+    if (frappe.get_single("Common Stock Setting").disable_future_stock_transaction_check):
         return
     items, warehouses = doc.get_items_and_warehouses()
     future_stock_vouchers = get_future_stock_vouchers(
@@ -173,7 +173,6 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 
     processed_gl_map = process_gl_map(gl_list)
     if self.get("purpose") == "Material Transfer" and (self.get("add_to_transit") or self.get("outgoing_stock_entry")):
-        
         # intermediate_warehouse = frappe.get_doc(
         #     "NCITY Settings").intermediate_warehouse
         intermediate_warehouse = frappe.get_doc(
@@ -202,7 +201,7 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 
                     processed_gl_map.append(intermediate)
 
-                    if(entry.credit > 0):
+                    if (entry.credit > 0):
                         entry.debit = entry.credit
                     else:
                         entry.credit = entry.debit
@@ -220,21 +219,21 @@ def validate_stock_keeper(doc, method):
     
     valid = False
     message = ""
-    if((doc.purpose == "Material Transfer" and not doc.outgoing_stock_entry) or doc.purpose == "Material Issue" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
+    if ((doc.purpose == "Material Transfer" and not doc.outgoing_stock_entry) or doc.purpose == "Material Issue" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
         message = "Sorry, You can not send from this warehouse"
         keepers = frappe.get_doc(
             "Warehouse", doc.from_warehouse).stock_keeper_users
         for keeper in keepers:
-            if(frappe.session.user == keeper.user and keeper.send_to_warehouse):
+            if (frappe.session.user == keeper.user and keeper.send_to_warehouse):
                 valid = True
                 break
 
-    elif((doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt"):
+    elif ((doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt"):
         message = "Sorry, You can not receive at this warehouse"
         keepers = frappe.get_doc(
             "Warehouse", doc.to_warehouse).stock_keeper_users
         for keeper in keepers:
-            if(frappe.session.user == keeper.user and keeper.receive_at_warehouse):
+            if (frappe.session.user == keeper.user and keeper.receive_at_warehouse):
                 valid = True
                 break
 
@@ -445,11 +444,11 @@ def search_serial_or_batch_or_barcode_number(search_value):
 
 
 def validate_add_to_transit(doc, method):
-    if(doc.purpose == 'Material Transfer' and not doc.outgoing_stock_entry and not doc.add_to_transit):
-        if(doc.from_warehouse and doc.to_warehouse):
+    if (doc.purpose == 'Material Transfer' and not doc.outgoing_stock_entry and not doc.add_to_transit):
+        if (doc.from_warehouse and doc.to_warehouse):
             from_current_warehouse = get_current_account(doc.from_warehouse)
             to_current_warehouse = get_current_account(doc.to_warehouse)
-            if(from_current_warehouse != to_current_warehouse):
+            if (from_current_warehouse != to_current_warehouse):
                 frappe.throw(
                     _('<b>Check Add To Transit</b>  The Trannsaction Is Between Different Branches'))
 

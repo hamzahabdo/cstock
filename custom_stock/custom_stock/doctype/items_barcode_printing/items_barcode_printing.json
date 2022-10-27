@@ -1,0 +1,119 @@
+{
+ "actions": [],
+ "creation": "2020-04-23 11:55:52.305459",
+ "doctype": "DocType",
+ "document_type": "System",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "printer_model",
+  "printer_name",
+  "column_break_8",
+  "branch",
+  "price_list",
+  "column_break_3",
+  "print_from",
+  "document_no",
+  "items_to_print_section",
+  "print_with_break",
+  "items"
+ ],
+ "fields": [
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "depends_on": "eval:doc.branch && doc.price_list",
+   "fieldname": "print_from",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Print from",
+   "options": "Manual Entry\nPurchase Invoice\nStock Entry\nDiscount Batch"
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval:doc.branch",
+   "fieldname": "price_list",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Price List",
+   "options": "Price List"
+  },
+  {
+   "depends_on": "eval:doc.branch && doc.price_list && doc.print_from && doc.print_from != \"Manual Entry\"",
+   "fieldname": "document_no",
+   "fieldtype": "Dynamic Link",
+   "in_list_view": 1,
+   "label": "Document No.",
+   "options": "print_from"
+  },
+  {
+   "depends_on": "eval:doc.branch && doc.price_list && doc.print_from\n&& doc.printer_name && doc.printer_model ",
+   "fieldname": "items_to_print_section",
+   "fieldtype": "Section Break",
+   "label": "Items To Print"
+  },
+  {
+   "depends_on": "eval:doc.branch && doc.price_list \n&& doc.print_from \n&& doc.printer_name && doc.printer_model ",
+   "fieldname": "items",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Items To Print"
+  },
+  {
+   "fieldname": "printer_model",
+   "fieldtype": "Link",
+   "label": "Printer Model",
+   "options": "Barcode Printer Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "printer_name",
+   "fieldtype": "Link",
+   "label": "Printer Name",
+   "options": "Printer Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_8",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "1",
+   "fieldname": "print_with_break",
+   "fieldtype": "Check",
+   "label": "Print With Break"
+  }
+ ],
+ "hide_toolbar": 1,
+ "icon": "fa fa-print",
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-09-25 14:47:57.162032",
+ "modified_by": "Administrator",
+ "module": "Custom Stock",
+ "name": "Items Barcode Printing",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
