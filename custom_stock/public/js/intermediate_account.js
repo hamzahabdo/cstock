@@ -146,7 +146,7 @@ frappe.ui.form.on("Stock Entry", {
     }
     if (frm.doc.docstatus < 1) {
       frm.add_custom_button(__(btn_name), function () {
-        nct.utils.empty_table(frm, "items");
+        easy_pos.utils.empty_table(frm, "items");
         erpnext.utils.map_current_doc({
           method: "nct.ncity.doctype.stock_inventory.stock_inventory.make_stock_entry",
           source_doctype: "Stock Inventory Processing",

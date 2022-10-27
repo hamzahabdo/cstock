@@ -1,18 +1,20 @@
+# Copyright (c) 2022,burjalmaha Team and Contributors
+
 from __future__ import unicode_literals
 from warnings import filters
 import frappe
 from frappe import _, whitelist
 from frappe.utils import data
-from rstrnt.custom_restaurant.overrides.pos_invoice.custom_pos_invoice import get_stock_availability
-
 
 def GetQty(item_code_list, warehouse, uom=None):
+    from rstrnt.custom_restaurant.overrides.pos_invoice.custom_pos_invoice import get_stock_availability
     data = []
     for i in item_code_list:
         qty = get_stock_availability(i["item_code"], warehouse, uom)
         if qty > 0:
             data.append({"item_code": i["item_code"], "UOM": i["uom"],
-                        "qty": qty, "conversion_factor": i["conversion_factor"]})
+                        "qty": qty, "conversion_factor": i["conversion_factor"],
+                        'item_name': i['item_name']})
         # data.setdefault(i["item_scrap"], {}).update({"item_code":i["item_scrap"],"qty":y})
     return data
 
@@ -20,7 +22,7 @@ def GetQty(item_code_list, warehouse, uom=None):
 @frappe.whitelist(allow_guest=True)
 def GetItemScrap(warehouse):
     formated_data = []
-    sql = """select item_scrap,uom  from `tabScrap Item` as tsi
+    sql = """select item_scrap,uom, item_name  from `tabScrap Item` as tsi
             JOIN `tabCustom Stock Settings` as tcss ON tsi.parent = tcss.name
             where tcss.warehouse = '{0}'""".format(warehouse)
     x = frappe.db.sql(sql, as_dict=True)
@@ -29,7 +31,7 @@ def GetItemScrap(warehouse):
         data = frappe.db.get_list("UOM Conversion Detail", filters={
             "parent": i["item_scrap"], 'uom': i["uom"]}, fields=['conversion_factor'])[0]
         formated_data.append(
-            {"item_code": i["item_scrap"], 'uom': i['uom'], 'conversion_factor': data["conversion_factor"]})
+            {"item_code": i["item_scrap"], 'item_name': i["item_name"], 'uom': i['uom'], 'conversion_factor': data["conversion_factor"]})
     return GetQty(formated_data, warehouse)
 
 

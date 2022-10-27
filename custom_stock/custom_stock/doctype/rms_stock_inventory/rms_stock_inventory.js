@@ -22,6 +22,15 @@ frappe.ui.form.on("RMS Stock Inventory", {
       frm.trigger("add_get_items_button");
     }
   },
+  validate:function (frm){
+    frm.doc.items.map((item)=>{
+      let conversion_factor = typeof(item.conversion_factor) === "string" ? parseInt(item.conversion_factor) : item.conversion_factor
+      if((conversion_factor * item.qty) != item.stock_qty){
+        frappe.throw("Stock Quantity Doesn't match Quantity In " + item.item_name + item.item_code )
+      }
+    })
+  }
+  ,
   add_context_button(frm) {
     frm.add_custom_button(__("Make Inventory"), () => {
       frappe.warn(
