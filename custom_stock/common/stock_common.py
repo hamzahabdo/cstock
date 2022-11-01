@@ -379,8 +379,9 @@ def get_inventory_items(warehouse, inventory, qty):
 
 
 def validate_for_items(doc, method):
-
-    if doc.branch != 'اس باك':
+    allow_multi_item = frappe.get_doc(
+        "Custom Stock Setting").allow_multiple_items
+    if allow_multi_item:
         check_list = []
         for d in doc.get("items"):
             if d.item_code in check_list:
