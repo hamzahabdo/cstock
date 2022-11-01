@@ -173,7 +173,7 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 
     processed_gl_map = process_gl_map(gl_list)
     if self.get("purpose") == "Material Transfer" and (self.get("add_to_transit") or self.get("outgoing_stock_entry")):
-        
+
         # intermediate_warehouse = frappe.get_doc(
         #     "NCITY Settings").intermediate_warehouse
         intermediate_warehouse = frappe.get_doc(
@@ -217,7 +217,7 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 def validate_stock_keeper(doc, method):
     if frappe.session.user == "Administrator":
         return
-    
+
     valid = False
     message = ""
     if((doc.purpose == "Material Transfer" and not doc.outgoing_stock_entry) or doc.purpose == "Material Issue" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
@@ -379,13 +379,15 @@ def get_inventory_items(warehouse, inventory, qty):
 
 
 def validate_for_items(doc, method):
-    check_list = []
-    for d in doc.get("items"):
-        if d.item_code in check_list:
-            frappe.throw(
-                _("Row# {0}: Item {1} entered more than once").format(d.idx, d.item_code))
-        else:
-            check_list.append(d.item_code)
+
+    if doc.branch != 'اس باك':
+        check_list = []
+        for d in doc.get("items"):
+            if d.item_code in check_list:
+                frappe.throw(
+                    _("Row# {0}: Item {1} entered more than once").format(d.idx, d.item_code))
+            else:
+                check_list.append(d.item_code)
 
 
 @frappe.whitelist()
