@@ -235,7 +235,7 @@ frappe.ui.form.on('Stock Reconciliation', {
 		for (const item of frm.doc.items) {
 			amount_difference += item.amount_difference;
 		}
-		if (amount_difference != frm.doc.difference_amount) {
+		if ( amount_difference.toFixed(4) != frm.doc.difference_amount.toFixed(4)) {
 			frappe.throw(__("Difference amount is not properly set!"));
 		}
 	},
