@@ -1,0 +1,42 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-02-09 13:44:20.736382",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "disable_future_stock_transaction_check"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "disable_future_stock_transaction_check",
+   "fieldtype": "Check",
+   "label": "Disable Future Stock Transaction Check"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-11-03 09:46:05.007509",
+ "modified_by": "Administrator",
+ "module": "Custom Stock",
+ "name": "Common Stock Setting",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
