@@ -381,7 +381,7 @@ def get_inventory_items(warehouse, inventory, qty):
 def validate_for_items(doc, method):
     allow_multi_item = frappe.get_doc(
         "Custom Stock Setting").allow_multiple_items
-    if allow_multi_item:
+    if allow_multi_item == 0:
         check_list = []
         for d in doc.get("items"):
             if d.item_code in check_list:
