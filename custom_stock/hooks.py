@@ -141,6 +141,10 @@ doc_events = {
     "RMS Stock Inventory": {
         "before_save": "custom_stock.common.stock_common.CheckConversionFactor"
     },
+    "Item Price": {
+        "validate": "custom_stock.custom_stock.doctype.pricing.pricing.validate_price_rate",
+        "before_save": "custom_stock.custom_stock.doctype.pricing.pricing.set_previous_rate"
+    },
 }
 
 # Scheduled Tasks
