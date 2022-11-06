@@ -67,7 +67,6 @@ function set_barcode(frm) {
     },
   });
 }
-
 function check_barcode_length(frm) {
   if (frm.doc.barcodes !== undefined) {
     if (frm.doc.barcodes[0].barcode !== undefined) {
