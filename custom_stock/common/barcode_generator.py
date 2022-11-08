@@ -4,18 +4,18 @@ from frappe import _
 
 @frappe.whitelist()
 def get_last_barcode():
+    pass
+    # item = frappe.get_all(
+    #     'Item',
+    #     order_by="creation desc",
+    #     limit_page_length=1
+    # )
+    # if item:
+    #     barcode = frappe.get_doc('Item', item[0]).barcodes[0].barcode
+    # else:
+    #     barcode = "0000000000"
 
-    item = frappe.get_all(
-        'Item',
-        order_by="creation desc",
-        limit_page_length=1
-    )
-    if item:
-        barcode = frappe.get_doc('Item', item[0]).barcodes[0].barcode
-    else:
-        barcode = "0000000000"
-
-    return str((int(barcode) + 1)).zfill(10)
+    # return str((int(barcode) + 1)).zfill(10)
 
 
 def set_barcode(doc, method):
