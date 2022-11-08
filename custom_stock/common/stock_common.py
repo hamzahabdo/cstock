@@ -173,7 +173,6 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
 
     processed_gl_map = process_gl_map(gl_list)
     if self.get("purpose") == "Material Transfer" and (self.get("add_to_transit") or self.get("outgoing_stock_entry")):
-
         # intermediate_warehouse = frappe.get_doc(
         #     "NCITY Settings").intermediate_warehouse
         intermediate_warehouse = frappe.get_doc(

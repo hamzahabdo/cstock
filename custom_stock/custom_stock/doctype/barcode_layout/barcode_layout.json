@@ -1,0 +1,56 @@
+{
+  "creation": "2020-08-13 11:35:56.862585",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": ["layout", "html_width", "html_height", "printer_width", "printer_height"],
+  "fields": [
+    {
+      "fieldname": "layout",
+      "fieldtype": "Link",
+      "in_list_view": 1,
+      "label": "Layout",
+      "options": "Layout Markup",
+      "reqd": 1
+    },
+    {
+      "fieldname": "html_width",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "HTML Width",
+      "reqd": 1
+    },
+    {
+      "fieldname": "html_height",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "HTML Height",
+      "reqd": 1
+    },
+    {
+      "fieldname": "printer_height",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Printer Height",
+      "reqd": 1
+    },
+    {
+      "fieldname": "printer_width",
+      "fieldtype": "Float",
+      "in_list_view": 1,
+      "label": "Printer Width",
+      "reqd": 1
+    }
+  ],
+  "istable": 1,
+  "modified": "2020-08-13 11:37:03.520387",
+  "modified_by": "Administrator",
+  "module": "Custom Stock",
+  "name": "Barcode Layout",
+  "owner": "Administrator",
+  "permissions": [],
+  "quick_entry": 1,
+  "sort_field": "modified",
+  "sort_order": "DESC",
+  "track_changes": 1
+}

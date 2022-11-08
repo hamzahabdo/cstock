@@ -151,7 +151,6 @@ doc_events = {
             "custom_stock.common.barcode_generator.set_barcode"
         ]
     },
-
 }
 
 # Scheduled Tasks
