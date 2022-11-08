@@ -145,6 +145,12 @@ doc_events = {
         "validate": "custom_stock.custom_stock.doctype.pricing.pricing.validate_price_rate",
         "before_save": "custom_stock.custom_stock.doctype.pricing.pricing.set_previous_rate"
     },
+    "Item": {
+        "validate": [
+            "custom_stock.common.stock_common.validate_item_code_and_barcodes",
+            "custom_stock.common.barcode_generator.set_barcode"
+        ]
+    },
 }
 
 # Scheduled Tasks

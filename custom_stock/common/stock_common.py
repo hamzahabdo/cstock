@@ -186,14 +186,14 @@ def get_gl_entries(self, warehouse_account=None, default_expense_account=None,
         if not (source_current_account == target_current_account):
             flag = 0
             for entry in processed_gl_map:
-                if(entry.account == intermediate_account):
+                if (entry.account == intermediate_account):
                     flag = 1
                     current_account = None
 
-                    if(self.get("purpose") == "Material Transfer" and not self.outgoing_stock_entry):
+                    if (self.get("purpose") == "Material Transfer" and not self.outgoing_stock_entry):
                         current_account = target_current_account
 
-                    elif(self.get("purpose") == "Material Transfer" and self.outgoing_stock_entry):
+                    elif (self.get("purpose") == "Material Transfer" and self.outgoing_stock_entry):
                         current_account = source_current_account
 
                     intermediate = entry.copy()
@@ -237,7 +237,7 @@ def validate_stock_keeper(doc, method):
                 valid = True
                 break
 
-    if(not valid):
+    if (not valid):
         frappe.throw(_(message))
 
 
@@ -380,7 +380,7 @@ def get_inventory_items(warehouse, inventory, qty):
 def validate_for_items(doc, method):
     allow_multi_item = frappe.get_doc(
         "Custom Stock Setting").allow_multiple_items
-    if allow_multi_item:
+    if allow_multi_item == 0:
         check_list = []
         for d in doc.get("items"):
             if d.item_code in check_list:
@@ -464,3 +464,29 @@ def CheckConversionFactor(doc, method):
         elif i.uom == i.stock_uom and int(i.conversion_factor) != 1:
             frappe.throw(
                 "The Conversion Factor for Item Code:{0} should be 1".format(i.item_code))
+
+
+def validate_item_code_and_barcodes(doc, method):
+    # doc = frappe.get_doc("Item", item_name)
+    for item_barcode in doc.barcodes:
+        if item_barcode.parent == item_barcode.barcode:
+            return
+        validate_duplicate("Item", item_barcode.barcode)
+
+    validate_duplicate("Item Barcode", doc.name)
+    # if doc.name:
+    #     if frappe.get_value("Item Barcode", doc.name, "name"):
+    #         frappe.throw(_("Item Name {0} already used for another Item Barcode").format(
+    #             doc.name))
+
+    # if item_barcode.barcode:
+    #     if frappe.get_value("Item", item_barcode.barcode, "name"):
+    #         frappe.throw(_("Barcode {0} already used for another Item name").format(
+    #             item_barcode.barcode))
+
+
+def validate_duplicate(target_doctype, source_docname):
+    if source_docname:
+        if frappe.get_value(target_doctype, source_docname, "name"):
+            frappe.throw(_("{0} is already used for another {1}").format(
+                source_docname, target_doctype))
