@@ -32,6 +32,10 @@ app_license = "BM"
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
+app_include_js = [
+    "/assets/custom_stock/js/zxing.js",
+]
+
 doctype_js = {
     "Stock Entry": [
         "public/js/intermediate_account.js",
@@ -39,7 +43,7 @@ doctype_js = {
         "public/js/stock_common.js",
         "public/js/custom_stock_entry.js"
     ],
-    "Stock Reconciliation": "public/js/stock _reconciliation.js",
+    "Stock Reconciliation": "public/js/stock_reconciliation.js",
     "Item": "public/js/item_common.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
