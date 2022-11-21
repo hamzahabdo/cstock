@@ -9,9 +9,11 @@
  "field_order": [
   "warehouse",
   "settlement_account",
+  "stock_entry_type_for_releasing",
   "column_break_3",
   "posting_date",
   "posting_time",
+  "stock_entry_type_for_supplying",
   "section_break_6",
   "items",
   "amended_from",
@@ -61,7 +63,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "allow_bulk_edit": 1,
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Items",
@@ -106,12 +107,28 @@
   {
    "fieldname": "column_break_13",
    "fieldtype": "Section Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "stock_entry_type_for_releasing",
+   "fieldtype": "Link",
+   "label": "Stock Entry Type For Releasing ",
+   "options": "Stock Entry Type",
+   "reqd": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "stock_entry_type_for_supplying",
+   "fieldtype": "Link",
+   "label": "Stock Entry Type For Supplying",
+   "options": "Stock Entry Type",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-11-16 11:34:21.193943",
+ "modified": "2022-11-21 09:48:26.395925",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "RMS Stock Inventory",
