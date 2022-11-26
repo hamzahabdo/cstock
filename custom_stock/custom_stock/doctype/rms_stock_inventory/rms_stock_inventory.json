@@ -63,6 +63,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_bulk_edit": 1,
    "fieldname": "items",
    "fieldtype": "Table",
    "label": "Items",
@@ -128,7 +129,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-11-21 09:48:26.395925",
+ "modified": "2022-11-26 09:20:09.847766",
  "modified_by": "Administrator",
  "module": "Custom Stock",
  "name": "RMS Stock Inventory",
