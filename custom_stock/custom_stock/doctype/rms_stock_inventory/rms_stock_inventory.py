@@ -69,11 +69,17 @@ def filter_uom(items):
     return tmp_obj
 
 
-def dispose_of_goods(items, account, warehouse, doc_name):
+def dispose_of_goods(items, account, warehouse, doc_name,stock_entry_type_for_releasing):
+    da = frappe.get_all("Stock Entry Type",
+                    filters={"name":stock_entry_type_for_releasing},
+                    fields=["purpose"])
+    
+    if (da[0]["purpose"]!="Material Issue"):
+        frappe.throw(_("Stock Entry Type Purpose: should be Material Issue "))
     if items:
         data = frappe.new_doc("Stock Entry")
-        data.stock_entry_type = "صرف مخزني"
-        data.purpose = "Material Issue"
+        data.stock_entry_type = stock_entry_type_for_releasing
+        data.purpose = da[0]["purpose"]
         data.expense_account = account
         data.from_warehouse = warehouse
         data.source_warehouse = warehouse
@@ -98,11 +104,18 @@ def dispose_of_goods(items, account, warehouse, doc_name):
                                 'stock_item_release_reference', ref)
 
 
-def supply_of_goods(items, account, warehouse, doc_name):
+def supply_of_goods(items, account, warehouse, doc_name,stock_entry_type_for_supplying):
+    da = frappe.get_all("Stock Entry Type",
+                    filters={"name":stock_entry_type_for_supplying},
+                    fields=["purpose"])
+    
+    if (da[0]["purpose"]!="Material Receipt"):
+        frappe.throw(_("Stock Entry Type Purpose: should be Material Receipt"))
+    
     if items:
         data = frappe.new_doc("Stock Entry")
-        data.stock_entry_type = "توريد مخزني"
-        data.purpose = "Material Receipt"
+        data.stock_entry_type =stock_entry_type_for_supplying
+        data.purpose = da[0]["purpose"]
         data.expense_account = account
         data.target_warehouse = warehouse
         data.to_warehouse = warehouse
@@ -154,9 +167,9 @@ def get_stock_ledger_entries(doc):
             items[i]["stock_qty"] = amount
             negative.append(items[i])
     dispose_of_goods(negative, da["settlement_account"], da["warehouse"],
-                     rms_s_i)
+                     rms_s_i,da["stock_entry_type_for_releasing"])
     supply_of_goods(positive, da["settlement_account"], da["warehouse"],
-                    rms_s_i)
+                    rms_s_i,da["stock_entry_type_for_supplying"])
 
 
 @frappe.whitelist()

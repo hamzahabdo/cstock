@@ -221,8 +221,16 @@ def validate_stock_keeper(doc, method):
     message = ""
     if ((doc.purpose == "Material Transfer" and not doc.outgoing_stock_entry) or doc.purpose == "Material Issue" or doc.purpose == "Manufacture" or doc.purpose == "Material Transfer for Manufacture"):
         message = "Sorry, You can not send from this warehouse"
+        warehouse = None
+        if doc.from_warehouse:
+            warehouse = doc.from_warehouse 
+        else :
+            warehouse = doc.source_warehouse
+        
         keepers = frappe.get_doc(
-            "Warehouse", doc.from_warehouse).stock_keeper_users
+            "Warehouse", warehouse).stock_keeper_users
+        
+        print(keepers)
         for keeper in keepers:
             if (frappe.session.user == keeper.user and keeper.send_to_warehouse):
                 valid = True
@@ -255,8 +263,13 @@ def set_branch(doc, method):
     if (doc.purpose == "Material Transfer" and doc.outgoing_stock_entry) or doc.purpose == "Material Receipt":
         _branch = frappe.get_doc('Warehouse', doc.to_warehouse)
     else:
-        from_warehouse = doc.from_warehouse
-        _branch = frappe.get_doc('Warehouse', from_warehouse)
+        warehouse = None
+        if doc.from_warehouse:
+            warehouse = doc.from_warehouse 
+        else :
+            warehouse = doc.source_warehouse
+            
+        _branch = frappe.get_doc('Warehouse', warehouse)
 
     branch = _branch.branch
     doc.set("branch", branch)
