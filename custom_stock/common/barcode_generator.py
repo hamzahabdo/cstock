@@ -12,7 +12,7 @@ def get_last_barcode():
     )
     if item:
         data = frappe.get_doc('Item', item[0])
-        if (data.barcodes[0].barcode):
+        if (data.barcodes):
             barcode = data.barcodes[0].barcode
         else:
             barcode = "0000000000"
