@@ -11,7 +11,11 @@ def get_last_barcode():
         limit_page_length=1
     )
     if item:
-        barcode = frappe.get_doc('Item', item[0]).barcodes[0].barcode
+        data = frappe.get_doc('Item', item[0])
+        if (data.barcodes[0].barcode):
+            barcode = data.barcodes[0].barcode
+        else:
+            barcode = "0000000000"
     else:
         barcode = "0000000000"
 
