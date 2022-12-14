@@ -6,7 +6,7 @@ from erpnext.stock.stock_ledger import NegativeStockError, get_previous_sle
 
 
 def check_actual_qty(doc, method):
-    if doc.voucher_type != 'Purchase Receipt':
+    if doc.voucher_type not in  ["Purchase Receipt","Stock Reconciliation"]:
         allow_negative_stock = frappe.get_all("Warehouse", filters={
                                             "name": doc.warehouse}, fields=["_allow_negative_stock"])[0]
 
