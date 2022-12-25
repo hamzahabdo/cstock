@@ -158,6 +158,11 @@ frappe.ui.form.on("Stock Entry", {
     ) {
       frm.doc.tw = frm.doc.sw;
     }
+    if(frm.doc.purpose==="Material Transfer" && frm.doc.outgoing_stock_entry===undefined){
+        frm.set_value("se_t","STW")
+    }else if(frm.doc.purpose==="Material Transfer" && frm.doc.outgoing_stock_entry){
+      frm.set_value("se_t","RAW")
+    }
   },
 });
 
