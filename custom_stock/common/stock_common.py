@@ -503,3 +503,10 @@ def validate_duplicate(target_doctype, source_docname):
         if frappe.get_value(target_doctype, source_docname, "name"):
             frappe.throw(_("{0} is already used for another {1}").format(
                 source_docname, target_doctype))
+
+
+def rename_stock_entry(doc,method):
+    if(doc.purpose=="Material Transfer" and doc.outgoing_stock_entry==None):
+        doc.se_t="STW"
+    elif(doc.purpose=="Material Transfer" and doc.outgoing_stock_entry!=None)
+        doc.se_t="RAW"

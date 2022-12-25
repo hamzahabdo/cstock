@@ -122,7 +122,8 @@ doc_events = {
                      "custom_stock.common.stock_common.validate_stock_keeper",
                      "custom_stock.common.stock_common.set_branch",
                      "custom_stock.common.stock_common.validate_for_items"
-        ]
+        ],
+        "autoname":"custom_stock.common.stock_common.rename_stock_entry"
     },
     "Purchase Receipt": {
         "validate": "custom_stock.common.stock_common.assign_override_methods",
