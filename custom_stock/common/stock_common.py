@@ -508,5 +508,5 @@ def validate_duplicate(target_doctype, source_docname):
 def rename_stock_entry(doc,method):
     if(doc.purpose=="Material Transfer" and doc.outgoing_stock_entry==None):
         doc.se_t="STW"
-    elif(doc.purpose=="Material Transfer" and doc.outgoing_stock_entry!=None)
+    elif(doc.purpose=="Material Transfer" and doc.outgoing_stock_entry!=None):
         doc.se_t="RAW"
