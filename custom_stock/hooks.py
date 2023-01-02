@@ -114,7 +114,7 @@ doc_events = {
         "before_save": "custom_stock.common.custom_stock_entry.CheckConversionFactor",
         "validate": [
                      "custom_stock.common.stock_common.validate_add_to_transit",
-                     "custom_stock.common.stock_common.assign_override_methods",
+                    #  "custom_stock.common.stock_common.assign_override_methods",
                      "custom_stock.common.stock_common.validate_stock_keeper",
                      "custom_stock.common.stock_common.set_branch",
                      "custom_stock.common.stock_common.validate_for_items"
