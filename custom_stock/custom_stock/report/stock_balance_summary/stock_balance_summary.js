@@ -220,7 +220,7 @@ async function get_item_from_data(){
 	}
 	frappe.call({
 		type: "GET",
-		method:'custom_stock.burj_almaha.report.stock_balance_summary.stock_balance_summary.get_purhcase_invoice',
+		method:'custom_stock.custom_stock.report.stock_balance_summary.stock_balance_summary.get_purhcase_invoice',
 		async: false,
 		no_spinner: true,
 		args: args,
@@ -237,7 +237,7 @@ async function get_item_group_data(){
 	let data = [];
 	let response = await frappe.call({
 		type: "GET",
-		method:'custom_stock.burj_almaha.report.stock_balance_summary.stock_balance_summary.get_item_group',
+		method:'custom_stock.custom_stock.report.stock_balance_summary.stock_balance_summary.get_item_group',
 		no_spinner: true,
 		args: {
 			doctype: 'Item Group'
@@ -253,7 +253,7 @@ async function get_warehouse_data(){
 	let data = [];
 	let response = await frappe.call({
 						type: "GET",
-						method:'custom_stock.burj_almaha.report.stock_balance_summary.stock_balance_summary.get_warehouse_data',
+						method:'custom_stock.custom_stock.report.stock_balance_summary.stock_balance_summary.get_warehouse_data',
 						async:true,
 						no_spinner: true,
 						args: {
